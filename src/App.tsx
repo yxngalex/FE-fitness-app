@@ -1,11 +1,11 @@
 import './App.css'
-import Register from "./pages/register/Register.tsx";
+import Login from "@/pages/login/Login.tsx";
 
 function App() {
 
   return (
     <>
-        <Register />
+        <Login />
     </>
   )
 }
