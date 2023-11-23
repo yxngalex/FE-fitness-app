@@ -1,17 +1,37 @@
 import {Button} from "@/components/ui/button.tsx";
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Input} from "@/components/ui/input";
 import {zodResolver} from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
 import * as z from "zod"
 import Register from "@/components/register/Register.tsx";
+import {quotes} from "@/data/quotes.ts";
 
+
+interface Quote {
+    id: number,
+    name: string,
+    quote: string,
+    profession: string
+}
+
+const getRandomQuote = (): Quote => {
+    const randomIndex = Math.floor(Math.random() * quotes.length)
+
+    return quotes[randomIndex];
+}
 const Login = () => {
     const [showRegister, setShowRegister] = useState(false);
-
+    const [randomQuote, setRandomQuote] = useState<Partial<Quote>>({});
     const imgUrl = "https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
     const bgColor = "#f9f9f9";
+
+
+    useEffect(() => {
+        setRandomQuote(getRandomQuote);
+    }, [])
+
 
     const toggleView = () => {
         setShowRegister(!showRegister);
@@ -44,10 +64,8 @@ const Login = () => {
                  style={{backgroundImage: `url(${imgUrl})`}}>
                 <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
                 <div className="w-full px-24 z-10">
-                    {/*I want this to change each time i refresh the page*/}
-                    <h1 className="text-5xl font-bold text-left tracking-wide">All progress takes place outside the
-                        comfort zone.</h1>
-                    <p className="text-xl my-4">- Michael John Bobak, digital artist</p>
+                    <h1 className="text-5xl font-bold text-left tracking-wide">{randomQuote.quote}</h1>
+                    <p className="text-xl my-4">- {randomQuote.name}, {randomQuote.profession}</p>
                 </div>
                 <div className="bottom-0 absolute p-4 text-center right-0 left-0 flex justify-center space-x-4">
                     <span>
