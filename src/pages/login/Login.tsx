@@ -7,6 +7,7 @@ import {useForm} from "react-hook-form"
 import * as z from "zod"
 import Register from "@/components/register/Register.tsx";
 import {quotes} from "@/data/quotes.ts";
+import {loginUser} from "@/api/auth/auth.redaxios.ts";
 
 
 interface Quote {
@@ -41,7 +42,7 @@ const Login = () => {
         username: z.string().min(5, {
             message: "Username must be at least 5 characters.",
         }),
-        password: z.string().min(8, {
+        password: z.string().min(1, {
             message: "Password must be at least 8 characters."
         })
     });
@@ -56,6 +57,11 @@ const Login = () => {
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         console.log(values);
+        loginUser(values.username, values.password).then(r =>
+            console.log(r)
+        ).catch(e => {
+            console.error(e)
+        });
     }
 
     return (
@@ -118,8 +124,6 @@ const Login = () => {
                                             )}></FormField>
                                     </div>
                                     <div className="pb-2 pt-4">
-                                        {/*<input className="block w-full p-4 text-lg rounded-sm bg-gray-300" type="password"*/}
-                                        {/*       name="password" id="password" placeholder="Password"/>*/}
                                         <FormField
                                             control={form.control}
                                             name="password"

@@ -5,12 +5,39 @@ import {useForm} from "react-hook-form"
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {ArrowBigLeftDash} from "lucide-react";
+// import {useEffect} from "react";
+// import {getGenders} from "@/api/gender/gender.redaxios.ts";
+// import {
+//     Dialog,
+//     DialogContent,
+//     DialogDescription, DialogHeader,
+//     DialogTitle,
+//     DialogTrigger
+// } from "@/components/ui/dialog.tsx";
+// import Goal from "@/components/goal/Goal.tsx";
 
 interface RegisterProps {
     onToggleView: () => void;
 }
 
 const Register = ({onToggleView}: RegisterProps) => {
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             await getGenders();
+    //         } catch (e) {
+    //             console.error('Error fetching genders.', e)
+    //         }
+    //     }
+    //
+    //     fetchData;
+    //
+    //     return () => {
+    //
+    //     }
+    // }, []);
+
 
     const handleBackToLogin = () => {
         onToggleView();
@@ -124,8 +151,6 @@ const Register = ({onToggleView}: RegisterProps) => {
                     </div>
                     <div className="flex">
                         <div className="pb-2 pt-4 flex-1 mr-2">
-                            {/*<input className="block w-full p-4 text-lg rounded-sm bg-gray-300" type="password"*/}
-                            {/*       name="password" id="password" placeholder="Password"/>*/}
                             <FormField
                                 control={form.control}
                                 name="firstName"
