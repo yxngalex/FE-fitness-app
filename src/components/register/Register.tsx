@@ -5,39 +5,26 @@ import {useForm} from "react-hook-form"
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {ArrowBigLeftDash} from "lucide-react";
-// import {useEffect} from "react";
-// import {getGenders} from "@/api/gender/gender.redaxios.ts";
-// import {
-//     Dialog,
-//     DialogContent,
-//     DialogDescription, DialogHeader,
-//     DialogTitle,
-//     DialogTrigger
-// } from "@/components/ui/dialog.tsx";
-// import Goal from "@/components/goal/Goal.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription, DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog.tsx";
+import Goal from "@/components/goal/Goal.tsx";
+import {User, UserDTO} from "@/model/UserDTO.ts";
+import {GoalDTO} from "@/model/GoalDTO.ts";
+import {useState} from "react";
+import {ZodError} from "zod";
 
 interface RegisterProps {
     onToggleView: () => void;
 }
 
 const Register = ({onToggleView}: RegisterProps) => {
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             await getGenders();
-    //         } catch (e) {
-    //             console.error('Error fetching genders.', e)
-    //         }
-    //     }
-    //
-    //     fetchData;
-    //
-    //     return () => {
-    //
-    //     }
-    // }, []);
-
+    const [user, registerUser] = useState<UserDTO | null>(null);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleBackToLogin = () => {
         onToggleView();
@@ -51,12 +38,18 @@ const Register = ({onToggleView}: RegisterProps) => {
             message: "Password must be at least 8 characters."
         }),
         confPassword: z.string(),
-        email: z.string(),
+        email: z.string().email({
+            message: "Invalid email address"
+        }),
         firstName: z.string(),
         lastName: z.string(),
         height: z.string(),
         weight: z.string(),
+        age: z.string(),
         gender: z.string()
+    }).refine(data => data.password === data.confPassword, {
+        message: "Passwords do not match.",
+        path: ["confPassword"],
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -70,12 +63,39 @@ const Register = ({onToggleView}: RegisterProps) => {
             lastName: "",
             height: "",
             weight: "",
+            age: "",
             gender: ""
         },
     })
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values);
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            await form.trigger();
+
+            if (Object.keys(form.formState.errors).length === 0) {
+                const userWrapper = new User(values.username, values.password, {
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    email: values.email,
+                    height: Number(values.height),
+                    weight: Number(values.weight),
+                    age: Number(values.age),
+                    gender: values.gender,
+                    goal: {} as GoalDTO,
+                });
+
+                registerUser(userWrapper);
+                setDialogOpen(true);
+            }
+        } catch (error) {
+            if (error instanceof ZodError) {
+                error.errors.forEach((err) => {
+                    console.error(err.message);
+                });
+            } else {
+                console.error(error);
+            }
+        }
     }
 
     return (
@@ -102,8 +122,6 @@ const Register = ({onToggleView}: RegisterProps) => {
                                 )}></FormField>
                         </div>
                         <div className="pb-2 pt-4 flex-1">
-                            {/*<input className="block w-full p-4 text-lg rounded-sm bg-gray-300" type="password"*/}
-                            {/*       name="password" id="password" placeholder="Password"/>*/}
                             <FormField
                                 control={form.control}
                                 name="password"
@@ -224,9 +242,26 @@ const Register = ({onToggleView}: RegisterProps) => {
                             )}></FormField>
                     </div>
                     <div className="px-4 pb-2 pt-6">
-                        <Button
-                            className="uppercase block w-full py-1 text-lg hover:bg-gray-400 focus:outline-none lg:bg-black bg-white lg:text-white text-black lg:hover:bg-gray-800">Sign
-                            Up</Button>
+                        <Dialog open={dialogOpen}>
+                            <DialogTrigger asChild>
+                                <Button
+                                    className="uppercase block w-full py-1 text-lg hover:bg-gray-400 focus:outline-none lg:bg-black bg-white lg:text-white text-black lg:hover:bg-gray-800"
+                                    onClick={() => setDialogOpen(false)}
+                                    type="submit"
+                                >
+                                    Sign Up</Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                                <DialogHeader>
+                                    <DialogTitle>Create a Goal.</DialogTitle>
+                                    <DialogDescription>
+                                        You need to create a personal goal. Click continue
+                                        when you're done.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                {user && <Goal userToSave={user} setDialogOpen={() => setDialogOpen(false)}/>}
+                            </DialogContent>
+                        </Dialog>
                     </div>
                     <div className="px-4 pb-2 mt-14">
                         <Button

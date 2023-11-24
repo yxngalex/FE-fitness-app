@@ -144,7 +144,8 @@ const Login = () => {
                                     </div>
                                     <div className="px-4 pb-2 pt-7">
                                         <a href="#" onClick={toggleView}><p
-                                            className="uppercase lg:text-black text-white hover:underline w-full text-lg">Or
+                                            className="uppercase lg:text-black text-white hover:underline w-full text-lg">
+                                            Or
                                             become a
                                             member
                                             today!</p></a>
