@@ -143,7 +143,7 @@ const Login = () => {
                                             In</Button>
                                     </div>
                                     <div className="px-4 pb-2 pt-7">
-                                        <a href="#" onClick={toggleView}><p
+                                        <a onClick={toggleView} className="cursor-pointer"><p
                                             className="uppercase lg:text-black text-white hover:underline w-full text-lg">
                                             Or
                                             become a

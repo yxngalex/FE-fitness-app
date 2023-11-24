@@ -4,7 +4,7 @@ import {Input} from "@/components/ui/input.tsx";
 import {useForm} from "react-hook-form"
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
-import {ArrowBigLeftDash} from "lucide-react";
+import {ArrowBigLeftDash, ChevronsUpDown} from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -15,8 +15,11 @@ import {
 import Goal from "@/components/goal/Goal.tsx";
 import {User, UserDTO} from "@/model/UserDTO.ts";
 import {GoalDTO} from "@/model/GoalDTO.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {ZodError} from "zod";
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
+import {Command, CommandGroup, CommandItem} from "@/components/ui/command.tsx";
+import {getGenders} from "@/api/gender/gender.redaxios.ts";
 
 interface RegisterProps {
     onToggleView: () => void;
@@ -25,6 +28,20 @@ interface RegisterProps {
 const Register = ({onToggleView}: RegisterProps) => {
     const [user, registerUser] = useState<UserDTO | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState("");
+    const [genders, setGenders] = useState([]);
+
+    useEffect(() => {
+        let mounted = true;
+
+        getGenders().then(data => {
+            if (mounted) {
+                setGenders(data)
+                mounted = false;
+            }
+        })
+    }, []);
 
     const handleBackToLogin = () => {
         onToggleView();
@@ -80,7 +97,7 @@ const Register = ({onToggleView}: RegisterProps) => {
                     height: Number(values.height),
                     weight: Number(values.weight),
                     age: Number(values.age),
-                    gender: values.gender,
+                    gender: value.toUpperCase(),
                     goal: {} as GoalDTO,
                 });
 
@@ -227,19 +244,53 @@ const Register = ({onToggleView}: RegisterProps) => {
                                 )}></FormField>
                         </div>
                     </div>
-                    <div className="pb-2 pt-4">
-                        <FormField
-                            control={form.control}
-                            name="gender"
-                            render={({field}) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <Input type="text" placeholder="Gender" {...field}
-                                               className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}></FormField>
+                    <div className="flex">
+                        <div className="pb-2 pt-4 flex-1 mr-2">
+                            <FormField
+                                control={form.control}
+                                name="age"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <Input type="number" placeholder="Age" {...field}
+                                                   className="appearance-none block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}></FormField>
+                        </div>
+                        <div className="pb-2 pt-4 flex-1">
+                            <Popover open={open} onOpenChange={setOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        role="combobox"
+                                        aria-expanded={open}
+                                        className="justify-between w-full h-full text-lg bg-black rounded-sm placeholder:text-zinc-100 hover:bg-gray-900"
+                                    >
+                                        Gender
+                                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-[250px] p-0">
+                                    <Command>
+                                        <CommandGroup>
+                                            {genders.map((gender) => (
+                                                <CommandItem
+                                                    key={gender}
+                                                    value={gender}
+                                                    onSelect={(currentValue) => {
+                                                        setValue(currentValue === value ? "" : currentValue)
+                                                        setOpen(false)
+                                                    }}
+                                                >
+                                                    {gender}
+                                                </CommandItem>
+                                            ))}
+                                        </CommandGroup>
+                                    </Command>
+                                </PopoverContent>
+                            </Popover>
+                        </div>
                     </div>
                     <div className="px-4 pb-2 pt-6">
                         <Dialog open={dialogOpen}>

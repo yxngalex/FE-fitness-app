@@ -3,17 +3,12 @@ import {UserDTO, User} from "@/model/UserDTO.ts";
 
 const BASE_URL = "http://localhost:8080/api/auth";
 
-export const registerUser =  async (user: UserDTO): Promise<void> => {
-    try {
-        const response = await redaxios.post(`${BASE_URL}/register`, user);
-        console.log(response.data)
-    } catch (error) {
-        console.error(error)
-        throw error;
-    }
+export const registerUser = async (user: UserDTO) => {
+    const response = await redaxios.post(`${BASE_URL}/register`, user);
+    return response.data;
 }
 
-export const loginUser =  async (username: string, password: string): Promise<void> => {
+export const loginUser = async (username: string, password: string): Promise<void> => {
     try {
         const user = new User(username, password);
 
@@ -27,8 +22,6 @@ export const loginUser =  async (username: string, password: string): Promise<vo
         } else {
             console.error('Login failed:', response.status, response.data);
         }
-
-        console.log(response.data)
     } catch (error) {
         console.error(error)
         throw error;

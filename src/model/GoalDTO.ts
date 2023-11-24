@@ -1,5 +1,5 @@
 export interface GoalDTO {
-    weightGoal: number,
-    bodyTypeGoal: string,
-    weeklyExercises: number
+    weightGoal: number;
+    bodyTypeGoal: string;
+    weeklyExercises: number;
 }
