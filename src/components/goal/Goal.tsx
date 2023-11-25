@@ -22,24 +22,23 @@ interface Goal {
 
 const Goal = ({userToSave, setDialogOpen}: Goal) => {
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState("");
-    const [bodyTypes, setBodyTypes] = useState([]);
-
-    useEffect(() => {
-        let mounted = true;
-
-        getBodyType().then(data => {
-            if (mounted) {
-                setBodyTypes(data)
-                mounted = false;
-            }
-        })
-    }, []);
+    const [value, setValue] = useState<string>("");
+    const [bodyTypes, setBodyTypes] = useState<string[]>([]);
 
     const formSchema = z.object({
-        weightGoal: z.string(),
+        weightGoal: z.string().refine(v => {
+            const weight = parseInt(v, 10);
+            return weight > 0 && weight <= 999;
+        }, {
+            message: "Weight goal must be above 0."
+        }),
         bodyTypeGoal: z.string(),
-        weeklyExercise: z.string()
+        weeklyExercise: z.string().refine(v => {
+            const exercise = parseInt(v, 10);
+            return exercise > 0 && exercise <= 6;
+        }, {
+            message: "Exercise must be between 1 and 6 days."
+        })
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -50,11 +49,39 @@ const Goal = ({userToSave, setDialogOpen}: Goal) => {
             weeklyExercise: ""
         },
     })
+
+    useEffect(() => {
+        let mounted = true;
+
+        const weightG = form.watch('weightGoal');
+
+        getBodyType().then(data => {
+            if (mounted) {
+                setBodyTypes(data)
+
+                if (weightG) {
+                    const weight = parseInt(weightG, 10);
+                    if (userToSave.weight < weight) {
+                        setValue("GAIN_WEIGHT");
+                    } else if (userToSave.weight > weight) {
+                        setValue("LOSE_WEIGHT")
+                    } else {
+                        setValue("MAINTAIN_WEIGHT")
+                    }
+
+                }
+
+                mounted = false;
+            }
+        })
+    }, [form, setValue]);
+
+
     const saveUserWithGoal = (v: z.infer<typeof formSchema>) => {
         const goal: GoalDTO = {
             weightGoal: Number(v.weightGoal),
             bodyTypeGoal: value.toUpperCase(),
-            weeklyExercises: Number(v.weeklyExercise)
+            weeklyExercise: Number(v.weeklyExercise)
         };
 
         console.log(goal)
@@ -111,37 +138,35 @@ const Goal = ({userToSave, setDialogOpen}: Goal) => {
                         <div className="pb-2 pt-4 mr-2 flex-1">
                             <div>
                                 <Popover open={open} onOpenChange={setOpen}>
-                                    <div>
-                                        <Label>What's your weight goal?</Label>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                role="combobox"
-                                                aria-expanded={open}
-                                                className="justify-between w-full h-full text-lg bg-black rounded-sm placeholder:text-zinc-100 hover:bg-gray-900 mt-2"
-                                            >
-                                                Weight Goal
-                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-[250px] p-0">
-                                            <Command>
-                                                <CommandGroup>
-                                                    {bodyTypes.map((bodyType) => (
-                                                        <CommandItem
-                                                            key={bodyType}
-                                                            value={bodyType}
-                                                            onSelect={(currentValue) => {
-                                                                setValue(currentValue === value ? "" : currentValue)
-                                                                setOpen(false)
-                                                            }}
-                                                        >
-                                                            {bodyType}
-                                                        </CommandItem>
-                                                    ))}
-                                                </CommandGroup>
-                                            </Command>
-                                        </PopoverContent>
-                                    </div>
+                                    <Label>What's your weight goal?</Label>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            role="combobox"
+                                            aria-expanded={open}
+                                            className="justify-between w-full h-full text-lg bg-black rounded-sm placeholder:text-zinc-100 hover:bg-gray-900 mt-2"
+                                        >
+                                            {value ? value.toUpperCase() : "Select"}
+                                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-[250px] p-0">
+                                        <Command>
+                                            <CommandGroup>
+                                                {bodyTypes.map((bodyType) => (
+                                                    <CommandItem
+                                                        key={bodyType}
+                                                        value={bodyType}
+                                                        onSelect={(currentValue) => {
+                                                            setValue(currentValue === value ? "" : currentValue)
+                                                            setOpen(false)
+                                                        }}
+                                                    >
+                                                        {bodyType}
+                                                    </CommandItem>
+                                                ))}
+                                            </CommandGroup>
+                                        </Command>
+                                    </PopoverContent>
                                 </Popover>
                             </div>
                         </div>

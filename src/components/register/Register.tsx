@@ -6,7 +6,7 @@ import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {ArrowBigLeftDash, ChevronsUpDown} from "lucide-react";
 import {
-    Dialog,
+    Dialog, DialogClose,
     DialogContent,
     DialogDescription, DialogHeader,
     DialogTitle,
@@ -58,11 +58,24 @@ const Register = ({onToggleView}: RegisterProps) => {
         email: z.string().email({
             message: "Invalid email address"
         }),
-        firstName: z.string(),
-        lastName: z.string(),
-        height: z.string(),
-        weight: z.string(),
-        age: z.string(),
+        firstName: z.string().min(1, {
+            message: "Field can't be empty!"
+        }),
+        lastName: z.string().min(1 , {
+            message: "Field can't be empty!"
+        }),
+        height: z.string().min(1, {
+            message: "Field can't be empty!"
+        }),
+        weight: z.string().min(1, {
+            message: "Field can't be empty!"
+        }),
+        age: z.string().refine(v => {
+            const age = parseInt(v, 10);
+            return age >= 18 && age <= 99;
+        }, {
+            message: "Age must be between 18 and 99."
+        }),
         gender: z.string()
     }).refine(data => data.password === data.confPassword, {
         message: "Passwords do not match.",
@@ -267,7 +280,7 @@ const Register = ({onToggleView}: RegisterProps) => {
                                         aria-expanded={open}
                                         className="justify-between w-full h-full text-lg bg-black rounded-sm placeholder:text-zinc-100 hover:bg-gray-900"
                                     >
-                                        Gender
+                                        {value ? value.toUpperCase() : "Gender"}
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
                                     </Button>
                                 </PopoverTrigger>
@@ -309,6 +322,7 @@ const Register = ({onToggleView}: RegisterProps) => {
                                         You need to create a personal goal. Click continue
                                         when you're done.
                                     </DialogDescription>
+                                    <DialogClose onClick={() => setDialogOpen(false)}/>
                                 </DialogHeader>
                                 {user && <Goal userToSave={user} setDialogOpen={() => setDialogOpen(false)}/>}
                             </DialogContent>
