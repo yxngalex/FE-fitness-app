@@ -92,6 +92,8 @@ const Goal = ({userToSave, setDialogOpen}: Goal) => {
 
         registerUser(userToSave).then(response => {
             console.log(response);
+        }).catch(e => {
+            console.error(e);
         });
 
         setDialogOpen(false)

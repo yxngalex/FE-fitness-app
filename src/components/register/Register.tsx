@@ -61,7 +61,7 @@ const Register = ({onToggleView}: RegisterProps) => {
         firstName: z.string().min(1, {
             message: "Field can't be empty!"
         }),
-        lastName: z.string().min(1 , {
+        lastName: z.string().min(1, {
             message: "Field can't be empty!"
         }),
         height: z.string().min(1, {
@@ -115,7 +115,6 @@ const Register = ({onToggleView}: RegisterProps) => {
                 });
 
                 registerUser(userWrapper);
-                setDialogOpen(true);
             }
         } catch (error) {
             if (error instanceof ZodError) {
@@ -310,7 +309,7 @@ const Register = ({onToggleView}: RegisterProps) => {
                             <DialogTrigger asChild>
                                 <Button
                                     className="uppercase block w-full py-1 text-lg hover:bg-gray-400 focus:outline-none lg:bg-black bg-white lg:text-white text-black lg:hover:bg-gray-800"
-                                    onClick={() => setDialogOpen(false)}
+                                    onClick={() => setDialogOpen(true)}
                                     type="submit"
                                 >
                                     Sign Up</Button>

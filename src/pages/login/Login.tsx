@@ -40,10 +40,10 @@ const Login = () => {
 
     const formSchema = z.object({
         username: z.string().min(1, {
-            message: "Username can't be empty",
+            message: "Field can't be empty!",
         }),
         password: z.string().min(1, {
-            message: "Password can't be empty"
+            message: "Field can't be empty!"
         })
     });
 
@@ -70,7 +70,7 @@ const Login = () => {
                  style={{backgroundImage: `url(${imgUrl})`}}>
                 <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
                 <div className="w-full px-24 z-10">
-                    <h1 className="text-5xl font-bold text-left tracking-wide">{randomQuote.quote}</h1>
+                    <h1 className="text-5xl font-bold text-left tracking-wide">"{randomQuote.quote}"</h1>
                     <p className="text-xl my-4">- {randomQuote.name}, {randomQuote.profession}</p>
                 </div>
                 <div className="bottom-0 absolute p-4 text-center right-0 left-0 flex justify-center space-x-4">
