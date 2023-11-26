@@ -17,14 +17,14 @@ function App() {
             {errorMessage && (
                 <ErrorAlert errorMessage={errorMessage} onClose={() => setErrorMessage(null)}/>
             )}
-            {
-                successMessage && (
-                    <SuccessAlert alertMessage={successMessage} onClose={() => setSuccessMessage(null)}/>
-                )
-            }
+            {successMessage && (
+                <SuccessAlert alertMessage={successMessage} onClose={() => setSuccessMessage(null)}/>
+            )}
             <Routes>
-                <Route path="/login" element={<Login setErrorMessage={setErrorMessage} setLoginMessage={setSuccessMessage}/>}/>
-                <Route path="/" element={auth?.isAuthenticated ? <Home/> : <Navigate to="/login"/>}/>
+                <Route path="/login"
+                       element={<Login setErrorMessage={setErrorMessage} setLoginMessage={setSuccessMessage}/>}/>
+                <Route path="/"
+                       element={auth?.isAuthenticated ? <Home/> : <Navigate to="/login"/>}/>
             </Routes>
         </>
     )
