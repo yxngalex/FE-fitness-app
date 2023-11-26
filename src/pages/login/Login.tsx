@@ -22,7 +22,13 @@ const getRandomQuote = (): Quote => {
 
     return quotes[randomIndex];
 }
-const Login = () => {
+
+interface Login {
+    setErrorMessage: (error: string | null) => void;
+    setLoginMessage: (success: string | null) => void;
+}
+
+const Login = ({setErrorMessage, setLoginMessage}: Login) => {
     const [showRegister, setShowRegister] = useState(false);
     const [randomQuote, setRandomQuote] = useState<Partial<Quote>>({});
     const imgUrl = "https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
@@ -57,10 +63,12 @@ const Login = () => {
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         console.log(values);
-        loginUser(values.username, values.password).then(r =>
-            console.log(r)
+        loginUser(values.username, values.password).then(r => {
+                console.log(r);
+            }
         ).catch(e => {
             console.error(e)
+            setErrorMessage(e.data)
         });
     }
 
@@ -100,7 +108,7 @@ const Login = () => {
                         <h1 className="text-4xl lg:text-black text-white">MyFitnessApp</h1>
                     </div>
                     {showRegister ? (
-                        <Register onToggleView={toggleView}/>
+                        <Register onToggleView={toggleView} onRegisterError={setErrorMessage} onRegisterSuccess={setLoginMessage}/>
                     ) : (
                         <>
                             <p className="lg:text-black text-white text-xl">

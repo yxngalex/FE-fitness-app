@@ -17,9 +17,11 @@ import {getBodyType} from "@/api/bodyType/bodyType.redaxios.ts";
 
 interface Goal {
     userToSave: UserDTO,
+    onGoalError: (error: string | null) => void;
+    onGoalSuccess: (error: string | null) => void;
 }
 
-const Goal = ({userToSave}: Goal) => {
+const Goal = ({userToSave, onGoalError, onGoalSuccess}: Goal) => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState<string>("");
     const [bodyTypes, setBodyTypes] = useState<string[]>([]);
@@ -62,7 +64,7 @@ const Goal = ({userToSave}: Goal) => {
 
     useEffect(() => {
         const weightGoal = parseInt(form.getValues("weightGoal"), 10);
-        const userWeight= userToSave.weight;
+        const userWeight = userToSave.weight;
 
         if (!isNaN(weightGoal) && !isNaN(userWeight)) {
             if (weightGoal > userWeight) {
@@ -90,9 +92,10 @@ const Goal = ({userToSave}: Goal) => {
         console.log(userToSave)
 
         registerUser(userToSave).then(response => {
-            console.log(response);
+            onGoalSuccess(response);
         }).catch(e => {
             console.error(e.data);
+            onGoalError(e.data);
         });
 
     }
