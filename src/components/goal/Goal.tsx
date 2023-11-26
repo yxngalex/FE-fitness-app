@@ -1,4 +1,4 @@
-import {DialogFooter} from "@/components/ui/dialog.tsx";
+import {DialogClose, DialogFooter} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {UserDTO} from "@/model/UserDTO.ts";
 import * as z from "zod";
@@ -17,10 +17,9 @@ import {getBodyType} from "@/api/bodyType/bodyType.redaxios.ts";
 
 interface Goal {
     userToSave: UserDTO,
-    setDialogOpen: (value: boolean) => void
 }
 
-const Goal = ({userToSave, setDialogOpen}: Goal) => {
+const Goal = ({userToSave}: Goal) => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState<string>("");
     const [bodyTypes, setBodyTypes] = useState<string[]>([]);
@@ -53,28 +52,28 @@ const Goal = ({userToSave, setDialogOpen}: Goal) => {
     useEffect(() => {
         let mounted = true;
 
-        const weightG = form.watch('weightGoal');
-
         getBodyType().then(data => {
             if (mounted) {
                 setBodyTypes(data)
-
-                if (weightG) {
-                    const weight = parseInt(weightG, 10);
-                    if (userToSave.weight < weight) {
-                        setValue("GAIN_WEIGHT");
-                    } else if (userToSave.weight > weight) {
-                        setValue("LOSE_WEIGHT")
-                    } else {
-                        setValue("MAINTAIN_WEIGHT")
-                    }
-
-                }
-
                 mounted = false;
             }
         })
-    }, [form, setValue]);
+    }, []);
+
+    useEffect(() => {
+        const weightGoal = parseInt(form.getValues("weightGoal"), 10);
+        const userWeight= userToSave.weight;
+
+        if (!isNaN(weightGoal) && !isNaN(userWeight)) {
+            if (weightGoal > userWeight) {
+                setValue("GAIN_WEIGHT");
+            } else if (weightGoal < userWeight) {
+                setValue("LOSE_WEIGHT");
+            } else {
+                setValue("MAINTAIN_WEIGHT");
+            }
+        }
+    }, [form.getValues("weightGoal"), userToSave.goal.weightGoal]);
 
 
     const saveUserWithGoal = (v: z.infer<typeof formSchema>) => {
@@ -93,10 +92,9 @@ const Goal = ({userToSave, setDialogOpen}: Goal) => {
         registerUser(userToSave).then(response => {
             console.log(response);
         }).catch(e => {
-            console.error(e);
+            console.error(e.data);
         });
 
-        setDialogOpen(false)
     }
 
     return (
@@ -140,7 +138,7 @@ const Goal = ({userToSave, setDialogOpen}: Goal) => {
                         <div className="pb-2 pt-4 mr-2 flex-1">
                             <div>
                                 <Popover open={open} onOpenChange={setOpen}>
-                                    <Label>What's your weight goal?</Label>
+                                    <Label>What's your primary goal?</Label>
                                     <PopoverTrigger asChild>
                                         <Button
                                             role="combobox"
@@ -173,7 +171,9 @@ const Goal = ({userToSave, setDialogOpen}: Goal) => {
                             </div>
                         </div>
                         <DialogFooter className="mt-14 text-center">
-                            <Button className="mx-auto" type="submit">Save</Button>
+                            <DialogClose asChild>
+                                <Button className="mx-auto" type="submit">Save</Button>
+                            </DialogClose>
                         </DialogFooter>
                     </div>
                 </form>
