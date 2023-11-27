@@ -85,11 +85,7 @@ const Goal = ({userToSave, onGoalError, onGoalSuccess}: Goal) => {
             weeklyExercise: Number(v.weeklyExercise)
         };
 
-        console.log(goal)
-
         userToSave.goal = goal;
-
-        console.log(userToSave)
 
         registerUser(userToSave).then(response => {
             onGoalSuccess(response);
