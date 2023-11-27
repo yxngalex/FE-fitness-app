@@ -5,7 +5,7 @@ interface IProps {
     children: ReactNode
 }
 
-interface IAuth {
+export interface IAuth {
     isAuthenticated: boolean;
     user: string;
 }

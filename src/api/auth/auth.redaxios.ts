@@ -1,5 +1,5 @@
 import redaxios from "redaxios";
-import {UserDTO, User} from "@/model/UserDTO.ts";
+import {User, UserDTO} from "@/model/UserDTO.ts";
 
 const BASE_URL = "http://localhost:8080/api/auth";
 
@@ -13,7 +13,7 @@ export const registerUser = async (user: UserDTO) => {
     return response.data;
 }
 
-export const loginUser = async (username: string, password: string): Promise<LoginResponse> => {
+export const loginUser = async (username: string, password: string): Promise<string> => {
     try {
         const user = new User(username, password);
 
@@ -21,10 +21,7 @@ export const loginUser = async (username: string, password: string): Promise<Log
 
         if (response.status >= 200 && response.status < 300) {
             const { accessToken, tokenType } = response.data;
-            const token = `${tokenType} ${accessToken}`;
-
-            sessionStorage.setItem("token", token);
-            return response.data;
+            return `${tokenType}${accessToken}`;
         } else {
             console.error("Login failed:", response.status, response.data);
             throw new Error(`Login failed: ${response.status}`);

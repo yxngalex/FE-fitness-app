@@ -1,6 +1,6 @@
 import {Button} from "@/components/ui/button.tsx";
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form.tsx";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Input} from "@/components/ui/input";
 import {zodResolver} from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
@@ -8,6 +8,8 @@ import * as z from "zod"
 import Register from "@/components/register/Register.tsx";
 import {quotes} from "@/data/quotes.ts";
 import {loginUser} from "@/api/auth/auth.redaxios.ts";
+import {AuthContext} from "@/providers/AuthProvider.tsx";
+import {useNavigate} from "react-router-dom";
 
 
 interface Quote {
@@ -31,6 +33,8 @@ interface Login {
 const Login = ({setErrorMessage, setLoginMessage}: Login) => {
     const [showRegister, setShowRegister] = useState(false);
     const [randomQuote, setRandomQuote] = useState<Partial<Quote>>({});
+    const {auth, setAuth} = useContext(AuthContext);
+    const navigate = useNavigate();
     const imgUrl = "https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
     const bgColor = "#f9f9f9";
 
@@ -39,6 +43,11 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
         setRandomQuote(getRandomQuote);
     }, [])
 
+    useEffect(() => {
+        if (auth?.isAuthenticated) {
+            navigate('/');
+        }
+    })
 
     const toggleView = () => {
         setShowRegister(!showRegister);
@@ -63,8 +72,18 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         console.log(values);
-        loginUser(values.username, values.password).then(r => {
-                console.log(r);
+        loginUser(values.username, values.password).then(token => {
+                sessionStorage.setItem('token', token);
+
+                console.log(token)
+
+                if (setAuth) {
+                    console.log("inside setAuth")
+                    setAuth({
+                        isAuthenticated: true,
+                        user: values.username
+                    })
+                }
             }
         ).catch(e => {
             console.error(e)
@@ -108,7 +127,8 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
                         <h1 className="text-4xl lg:text-black text-white">MyFitnessApp</h1>
                     </div>
                     {showRegister ? (
-                        <Register onToggleView={toggleView} onRegisterError={setErrorMessage} onRegisterSuccess={setLoginMessage}/>
+                        <Register onToggleView={toggleView} onRegisterError={setErrorMessage}
+                                  onRegisterSuccess={setLoginMessage}/>
                     ) : (
                         <>
                             <p className="lg:text-black text-white text-xl">
