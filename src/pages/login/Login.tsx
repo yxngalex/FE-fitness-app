@@ -75,10 +75,7 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
         loginUser(values.username, values.password).then(token => {
                 sessionStorage.setItem('token', token);
 
-                console.log(token)
-
                 if (setAuth) {
-                    console.log("inside setAuth")
                     setAuth({
                         isAuthenticated: true,
                         user: values.username
