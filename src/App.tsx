@@ -24,7 +24,7 @@ function App() {
                 <Route path="/login"
                        element={<Login setErrorMessage={setErrorMessage} setLoginMessage={setSuccessMessage}/>}/>
                 <Route path="/"
-                       element={auth?.isAuthenticated ? <Home/> : <Navigate to="/login"/>}/>
+                       element={auth?.isAuthenticated ? <Home username={auth?.user}/> : <Navigate to="/login"/>}/>
             </Routes>
         </>
     )

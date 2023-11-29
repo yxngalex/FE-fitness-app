@@ -68,11 +68,11 @@ const Goal = ({userToSave, onGoalError, onGoalSuccess}: Goal) => {
 
         if (!isNaN(weightGoal) && !isNaN(userWeight)) {
             if (weightGoal > userWeight) {
-                setValue("GAIN_WEIGHT");
+                setValue("Gain Weight");
             } else if (weightGoal < userWeight) {
-                setValue("LOSE_WEIGHT");
+                setValue("Lose Weight");
             } else {
-                setValue("MAINTAIN_WEIGHT");
+                setValue("Maintain Weight");
             }
         }
     }, [form.getValues("weightGoal"), userToSave.goal.weightGoal]);
