@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 import {Card, CardContent} from "@/components/ui/card.tsx";
 import {Apple, Drumstick, Flame, Pizza} from "lucide-react";
+import {Link} from "react-router-dom";
+import {getDayByDate} from "@/api/day/day.redaxios.ts";
 
 interface DashboardProps {
     username: string
@@ -25,6 +27,15 @@ const Dashboard = ({username}: DashboardProps) => {
         getCurrentTimeOfDay();
     }, []);
 
+    // useEffect(() => {
+    //     getDayByDate(new Date()).then(r => {
+    //             console.log(r);
+    //         }
+    //     ).catch(e => {
+    //         console.log("Day error: ", e);
+    //     });
+    // }, []);
+
     return (
         <div>
             <div className="p-8 block">
@@ -32,70 +43,79 @@ const Dashboard = ({username}: DashboardProps) => {
                 <span className="flex-1">Let's see your stats for today.</span>
             </div>
 
-            <div className="flex flex-grow-1 justify-center">
-                <Card className="flex-grow bg-red-100 mx-4 shadow-red-500">
-                    <CardContent className="flex items-center">
-                        <div className="border-2 rounded-full w-16 h-16 bg-white flex items-center justify-center">
-                            <Flame className="w-8 h-8 text-red-500"/>
-                        </div>
-                        <div className="ml-4 flex flex-col">
-                            <div className="text-black text-xl">
-                                0
-                            </div>
-                            <div className="text-slate-500 text-sm">
-                                Avg. calories
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+            <div className="flex w-full justify-around">
 
-                <Card className="flex-grow bg-blue-100 mx-4 shadow-blue-400">
-                    <CardContent className="flex items-center">
-                        <div className="border-2 rounded-full w-16 h-16 bg-white flex items-center justify-center">
-                            <Drumstick className="w-8 h-8 text-blue-500"/>
-                        </div>
-                        <div className="ml-4 flex flex-col">
-                            <div className="text-black text-xl">
-                                0
+                <Link to="/food">
+                    <Card className="flex items-center justify-center bg-red-100 mx-4 shadow-red-500 w-72">
+                        <CardContent className="flex items-center justify-center h-full py-3">
+                            <div className="border-2 rounded-full w-16 h-16 bg-white flex items-center justify-center">
+                                <Flame className="w-8 h-8 text-red-500"/>
                             </div>
-                            <div className="text-slate-500 text-sm">
-                                Avg. proteins
+                            <div className="ml-4 flex flex-col">
+                                <div className="text-black text-xl">
+                                    0
+                                </div>
+                                <div className="text-slate-500 text-sm">
+                                    Avg. calories
+                                </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                </Link>
 
-                <Card className="flex-grow bg-yellow-100 mx-4 shadow-yellow-400">
-                    <CardContent className="flex items-center">
-                        <div className="border-2 rounded-full w-16 h-16 bg-white flex items-center justify-center">
-                            <Apple className="w-8 h-8 text-yellow-500"/>
-                        </div>
-                        <div className="ml-4 flex flex-col">
-                            <div className="text-black text-xl">
-                                0
+                <Link to="/food">
+                    <Card className="flex items-center justify-center bg-blue-100 mx-4 shadow-blue-400 w-72">
+                        <CardContent className="flex items-center justify-center h-full py-3">
+                            <div className="border-2 rounded-full w-16 h-16 bg-white flex items-center justify-center">
+                                <Drumstick className="w-8 h-8 text-blue-500"/>
                             </div>
-                            <div className="text-slate-500 text-sm">
-                                Avg. carbs
+                            <div className="ml-4 flex flex-col">
+                                <div className="text-black text-xl">
+                                    0
+                                </div>
+                                <div className="text-slate-500 text-sm">
+                                    Avg. proteins
+                                </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                </Link>
 
-                <Card className="flex-grow bg-pink-100 mx-4 shadow-pink-400">
-                    <CardContent className="flex items-center">
-                        <div className="border-2 rounded-full w-16 h-16 bg-white flex items-center justify-center">
-                            <Pizza className="w-8 h-8 text-pink-500"/>
-                        </div>
-                        <div className="ml-4 flex flex-col">
-                            <div className="text-black text-xl">
-                                0
+                <Link to="/food">
+                    <Card className="flex items-center justify-center bg-yellow-100 mx-4 shadow-yellow-400 w-72">
+                        <CardContent className="flex items-center justify-center h-full py-3">
+                            <div className="border-2 rounded-full w-16 h-16 bg-white flex items-center justify-center">
+                                <Apple className="w-8 h-8 text-yellow-500"/>
                             </div>
-                            <div className="text-slate-500 text-sm">
-                                Avg. fat
+                            <div className="ml-4 flex flex-col">
+                                <div className="text-black text-xl">
+                                    0
+                                </div>
+                                <div className="text-slate-500 text-sm">
+                                    Avg. carbs
+                                </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                </Link>
+
+                <Link to="/food">
+                    <Card className="flex items-center justify-center bg-pink-100 mx-4 shadow-pink-400 w-72">
+                        <CardContent className="flex items-center justify-center h-full py-3">
+                            <div className="border-2 rounded-full w-16 h-16 bg-white flex items-center justify-center">
+                                <Pizza className="w-8 h-8 text-pink-500"/>
+                            </div>
+                            <div className="ml-4 flex flex-col">
+                                <div className="text-black text-xl">
+                                    0
+                                </div>
+                                <div className="text-slate-500 text-sm">
+                                    Avg. fat
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </Link>
             </div>
         </div>
     )

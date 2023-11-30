@@ -1,4 +1,4 @@
-import {LayoutDashboard, LogOut, User2} from "lucide-react";
+import {Dumbbell, EggFried, LayoutDashboard, LogOut, User2} from "lucide-react";
 import {Link, useLocation} from "react-router-dom";
 
 const Sidebar = () => {
@@ -26,6 +26,30 @@ const Sidebar = () => {
                                         className={isActiveTab('/') ? "text-black font-bold w-full flex ml-7" : "text-gray-400 w-full flex ml-7"}>
                                     Dashboard
                                 </span>
+                                </div>
+                            </li>
+                        </Link>
+                        <Link to="/exercise">
+                            <li className="flex justify-center items-center w-full hover:bg-blue-50">
+                                <div
+                                    className="flex items-center justify-center text-center rounded-lg px-4 py-6 text-sm">
+                                    <div>
+                                        <Dumbbell className={isActiveTab('/exercises') ? "text-blue-600" : "text-gray-400"}/>
+                                    </div>
+                                    <span
+                                        className={isActiveTab('/exercises') ? "text-black font-bold w-full flex ml-7" : "text-gray-400 w-full flex ml-7"}>Exercise</span>
+                                </div>
+                            </li>
+                        </Link>
+                        <Link to="/food">
+                            <li className="flex justify-center items-center w-full hover:bg-blue-50">
+                                <div
+                                    className="flex items-center justify-center text-center rounded-lg px-4 py-6 text-sm">
+                                    <div>
+                                        <EggFried className={isActiveTab('/food') ? "text-blue-600" : "text-gray-400"}/>
+                                    </div>
+                                    <span
+                                        className={isActiveTab('/food') ? "text-black font-bold w-full flex ml-7" : "text-gray-400 w-full flex ml-7"}>Food</span>
                                 </div>
                             </li>
                         </Link>
