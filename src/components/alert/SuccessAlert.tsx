@@ -25,7 +25,7 @@ const SuccessAlert = ({alertMessage, onClose}: SuccessAlertProps) => {
     return (
         <div
             role="alert"
-            className="fixed top-1 left-1/2 transform -translate-x-1/2 z-50 max-w-md rounded-xl border border-gray-100 bg-white p-4 transition-all duration-300 ease-in-out"
+            className="fixed top-3 left-1/2 transform -translate-x-1/2 z-50 max-w-md rounded-xl border border-gray-100 bg-white p-4 transition-all duration-300 ease-in-out"
         >
             <button className="absolute top-0 right-0 p-2" onClick={onClose}>
                 <svg className="h-6 w-6 text-blue-600 transition hover:text-gray-600" fill="none" stroke="currentColor"

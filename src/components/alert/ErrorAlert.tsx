@@ -23,7 +23,7 @@ const ErrorAlert = ({errorMessage, onClose}: ErrorAlertProps) => {
     return (
         <div
             role="alert"
-            className="fixed top-1 left-1/2 transform -translate-x-1/2 z-50 max-w-md rounded border-s-4 border-red-500 bg-red-50 p-4 transition-all duration-300 ease-in-out"
+            className="fixed top-3 left-1/2 transform -translate-x-1/2 z-50 max-w-md rounded border-s-4 border-red-500 bg-red-50 p-4 transition-all duration-300 ease-in-out"
         >
             <button className="absolute top-0 right-0 p-2" onClick={onClose}>
                 <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
