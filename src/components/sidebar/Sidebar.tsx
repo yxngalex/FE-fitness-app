@@ -12,7 +12,7 @@ const Sidebar = () => {
         <>
             <div className="flex flex-col h-screen w-[250px] justify-between border-e bg-slate-50">
                 <div className="px-4 py-6 text-center">
-                    <span className="text-xl text-gray-600 font-medium"> MyFitnessApp </span>
+                    <span className="text-xl text-gray-600 font-medium"> FitnessApp </span>
                     <ul className="mt-6 block items-center justify-center">
                         <Link to="/">
                             <li className="flex justify-center items-center w-full hover:bg-blue-50">

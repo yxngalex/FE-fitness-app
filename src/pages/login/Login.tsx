@@ -121,7 +121,7 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
                 </div>
                 <div className="w-full py-6 z-20">
                     <div className="my-6">
-                        <h1 className="text-4xl lg:text-black text-white">MyFitnessApp</h1>
+                        <h1 className="text-4xl lg:text-black text-white">FitnessApp</h1>
                     </div>
                     {showRegister ? (
                         <Register onToggleView={toggleView} onRegisterError={setErrorMessage}
