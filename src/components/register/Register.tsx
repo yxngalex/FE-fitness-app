@@ -152,7 +152,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                     <FormItem>
                                         <FormControl>
                                             <Input placeholder="Username" {...field}
-                                                   className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                   className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -166,7 +166,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                     <FormItem>
                                         <FormControl>
                                             <Input type="password" placeholder="Password" {...field}
-                                                   className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                   className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -183,7 +183,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                         <FormControl>
                                             <Input type="password"
                                                    placeholder="Confirm Password" {...field}
-                                                   className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                   className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -197,7 +197,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                     <FormItem>
                                         <FormControl>
                                             <Input type="email" placeholder="Email" {...field}
-                                                   className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                   className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -213,7 +213,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                     <FormItem>
                                         <FormControl>
                                             <Input type="text" placeholder="First name" {...field}
-                                                   className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                   className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -227,7 +227,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                     <FormItem>
                                         <FormControl>
                                             <Input type="text" placeholder="Last name" {...field}
-                                                   className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                   className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -243,7 +243,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                     <FormItem>
                                         <FormControl>
                                             <Input type="number" placeholder="Height in Kg" {...field}
-                                                   className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                   className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -257,7 +257,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                     <FormItem>
                                         <FormControl>
                                             <Input type="number" placeholder="Weight in Kg" {...field}
-                                                   className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                   className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -273,7 +273,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                     <FormItem>
                                         <FormControl>
                                             <Input type="number" placeholder="Age" {...field}
-                                                   className="appearance-none block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                   className="appearance-none block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -290,7 +290,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                                 <Button
                                                     role="combobox"
                                                     aria-expanded={open}
-                                                    className="justify-between w-full h-14 text-lg bg-black rounded-sm placeholder:text-zinc-100 hover:bg-gray-900"
+                                                    className="justify-between w-full h-14 text-lg bg-white hover:border-2 hover:border-black rounded-sm placeholder:text-black text-black hover:bg-gray-100"
                                                 >
                                                     {value ? value.toUpperCase() : "Gender"}
                                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
@@ -327,7 +327,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                             <Dialog>
                                 <DialogTrigger asChild>
                                     <Button
-                                        className="uppercase block w-full py-1 text-lg hover:bg-gray-400 focus:outline-none lg:bg-black bg-white lg:text-white text-black lg:hover:bg-gray-800"
+                                        className="uppercase w-1/2 h-[60px] py-1 text-lg hover:bg-blue-500 focus:outline-none lg:bg-blue-600 bg-blue-600 lg:text-white text-white lg:hover:bg-blue-500"
                                         type="submit"
                                     >
                                         Sign Up</Button>
@@ -340,14 +340,15 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                             when you're done.
                                         </DialogDescription>
                                     </DialogHeader>
-                                    {user && <Goal userToSave={user} onGoalError={onRegisterError} onGoalSuccess={onRegisterSuccess}/>}
+                                    {user && <Goal userToSave={user} onGoalError={onRegisterError}
+                                                   onGoalSuccess={onRegisterSuccess}/>}
                                 </DialogContent>
                             </Dialog>
                         )}
                     </div>
-                    <div className="px-4 pb-2 mt-14">
+                    <div className="px-4 pb-2 mt-14 flex justify-center items-center">
                         <Button
-                            className="uppercase flex items-center w-full py-1 text-lg hover:bg-gray-400 focus:outline-none lg:bg-black bg-white lg:text-white text-black lg:hover:bg-gray-800"
+                            className="uppercase flex items-center w-1/2 h-[60px] py-1 text-lg hover:bg-slate-500 focus:outline-none lg:bg-slate-600 bg-slate-600 lg:text-white text-white lg:hover:bg-slate-500"
                             onClick={handleBackToLogin}>
                             <ArrowBigLeftDash className="mr-2"/>
                             <span>Back to Login</span>

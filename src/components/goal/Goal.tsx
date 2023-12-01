@@ -113,7 +113,7 @@ const Goal = ({userToSave, onGoalError, onGoalSuccess}: Goal) => {
                                             <Input
                                                 type="number"
                                                 placeholder="..." {...field}
-                                                className="block w-full h-full p-4 text-lg rounded-sm bg-black text-white placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -128,7 +128,7 @@ const Goal = ({userToSave, onGoalError, onGoalSuccess}: Goal) => {
                                         <Label>How many times a week would you like to exercise? (1 - 6 days)</Label>
                                         <FormControl>
                                             <Input type="number" placeholder="..." {...field}
-                                                   className="block w-full h-full p-4 text-lg rounded-sm text-white bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                   className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -142,7 +142,7 @@ const Goal = ({userToSave, onGoalError, onGoalSuccess}: Goal) => {
                                         <Button
                                             role="combobox"
                                             aria-expanded={open}
-                                            className="justify-between w-full h-full text-lg bg-black rounded-sm placeholder:text-zinc-100 hover:bg-gray-900 mt-2"
+                                            className="justify-between w-full h-full text-lg bg-white rounded-sm placeholder:text-black text-black hover:bg-gray-100 mt-2"
                                         >
                                             {value ? value.toUpperCase() : "Select"}
                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
@@ -171,7 +171,7 @@ const Goal = ({userToSave, onGoalError, onGoalSuccess}: Goal) => {
                         </div>
                         <DialogFooter className="mt-14 text-center">
                             <DialogClose asChild>
-                                <Button className="mx-auto" type="submit">Save</Button>
+                                <Button className="mx-auto hover:bg-blue-500 bg-blue-600" type="submit">Save</Button>
                             </DialogClose>
                         </DialogFooter>
                     </div>

@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import {Card, CardContent} from "@/components/ui/card.tsx";
 import {Apple, Drumstick, Flame, Pizza} from "lucide-react";
 import {Link} from "react-router-dom";
-import {getDayByDate} from "@/api/day/day.redaxios.ts";
 
 interface DashboardProps {
     username: string

@@ -129,7 +129,7 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
                     ) : (
                         <>
                             <p className="lg:text-black text-white text-xl">
-                                Welcome back!
+                                Member Login
                             </p>
                             <Form {...form}>
                                 <form onSubmit={form.handleSubmit(onSubmit)}
@@ -142,7 +142,7 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
                                                 <FormItem>
                                                     <FormControl>
                                                         <Input placeholder="Username" {...field}
-                                                               className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                               className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                                     </FormControl>
                                                     <FormMessage/>
                                                 </FormItem>
@@ -156,20 +156,20 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
                                                 <FormItem>
                                                     <FormControl>
                                                         <Input type="password" placeholder="Password" {...field}
-                                                               className="block w-full h-full p-4 text-lg rounded-sm bg-black placeholder:text-zinc-100 hover:bg-gray-900"/>
+                                                               className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                                     </FormControl>
                                                     <FormMessage/>
                                                 </FormItem>
                                             )}></FormField>
                                     </div>
-                                    <div className="px-4 pb-2 pt-6">
+                                    <div className="px-4 pb-2 pt-6 flex justify-center items-center">
                                         <Button
-                                            className="uppercase block w-full py-1 text-lg hover:bg-gray-400 focus:outline-none lg:bg-black bg-white lg:text-white text-black lg:hover:bg-gray-800">Sign
+                                            className="uppercase w-1/2 h-[60px] py-1 text-lg hover:bg-blue-500 focus:outline-none lg:bg-blue-600 bg-blue-600 lg:text-white text-white lg:hover:bg-blue-500">Sign
                                             In</Button>
                                     </div>
                                     <div className="px-4 pb-2 pt-7">
                                         <a onClick={toggleView} className="cursor-pointer"><p
-                                            className="uppercase lg:text-black text-white hover:underline w-full text-lg">
+                                            className="uppercase lg:text-blue-600 text-white hover:underline w-full text-lg">
                                             Or
                                             become a
                                             member
