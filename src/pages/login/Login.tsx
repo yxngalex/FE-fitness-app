@@ -45,9 +45,10 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
 
     useEffect(() => {
         if (auth?.isAuthenticated) {
+            console.log("Redirecting to /")
             navigate('/');
         }
-    })
+    }, [auth, navigate])
 
     const toggleView = () => {
         setShowRegister(!showRegister);
@@ -73,7 +74,7 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         console.log(values);
         loginUser(values.username, values.password).then(token => {
-                sessionStorage.setItem('token', token);
+                localStorage.setItem('token', token);
 
                 if (setAuth) {
                     setAuth({
@@ -87,6 +88,10 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
             setErrorMessage(e.data)
         });
     }
+
+    useEffect(() => {
+        console.log("Auth set:", auth)
+    }, [auth]);
 
     return (
         <section className="min-h-screen flex items-stretch text-white ">

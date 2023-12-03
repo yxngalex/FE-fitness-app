@@ -2,6 +2,9 @@ import {useEffect, useState} from "react";
 import {Card, CardContent} from "@/components/ui/card.tsx";
 import {Apple, Drumstick, Flame, Pizza} from "lucide-react";
 import {Link} from "react-router-dom";
+import {getOverviewNutrition} from "@/api/overview/overview.redaxios.ts";
+import {getUserGoal} from "@/api/goal/goal.redaxios.ts";
+import {GoalDTO} from "@/model/GoalDTO.ts";
 
 interface DashboardProps {
     username: string
@@ -9,6 +12,11 @@ interface DashboardProps {
 
 const Dashboard = ({username}: DashboardProps) => {
     const [greeting, setGreeting] = useState('');
+    const [calories, setCalories] = useState(0);
+    const [protein, setProtein] = useState(0);
+    const [carbs, setCarbs] = useState(0);
+    const [fat, setFat] = useState(0);
+    const [goal, setGoal] = useState<GoalDTO | undefined>(undefined);
 
     useEffect(() => {
         const getCurrentTimeOfDay = () => {
@@ -26,20 +34,37 @@ const Dashboard = ({username}: DashboardProps) => {
         getCurrentTimeOfDay();
     }, []);
 
-    // useEffect(() => {
-    //     getDayByDate(new Date()).then(r => {
-    //             console.log(r);
-    //         }
-    //     ).catch(e => {
-    //         console.log("Day error: ", e);
-    //     });
-    // }, []);
+    useEffect(() => {
+        getOverviewNutrition().then(r => {
+                console.log(r);
+                setCalories(r.calories);
+                setProtein(r.protein);
+                setCarbs(r.carbs);
+                setFat(r.fat);
+            }
+        ).catch(e => {
+            console.log("Overview nutrition error: ", e);
+        });
+    }, []);
+
+    useEffect(() => {
+        getUserGoal().then(r => {
+            console.log(r);
+            const newGoalData: GoalDTO = {
+                weightGoal: r.weightGoal,
+                bodyTypeGoal: r.bodyTypeGoal,
+                weeklyExercise: r.weeklyExercise
+            }
+
+            setGoal(newGoalData);
+        })
+    }, [])
 
     return (
         <div>
             <div className="p-8 block">
                 <span className="text-4xl flex pb-6">{greeting} {username}</span>
-                <span className="flex-1">Let's see your stats for today.</span>
+                <span className="flex-1">Let's see your stats!</span>
             </div>
 
             <div className="flex w-full justify-around">
@@ -52,7 +77,7 @@ const Dashboard = ({username}: DashboardProps) => {
                             </div>
                             <div className="ml-4 flex flex-col">
                                 <div className="text-black text-xl">
-                                    0
+                                    {calories != null ? calories : 0}
                                 </div>
                                 <div className="text-slate-500 text-sm">
                                     Avg. calories
@@ -70,7 +95,7 @@ const Dashboard = ({username}: DashboardProps) => {
                             </div>
                             <div className="ml-4 flex flex-col">
                                 <div className="text-black text-xl">
-                                    0
+                                    {protein != null ? protein : 0}
                                 </div>
                                 <div className="text-slate-500 text-sm">
                                     Avg. proteins
@@ -88,7 +113,7 @@ const Dashboard = ({username}: DashboardProps) => {
                             </div>
                             <div className="ml-4 flex flex-col">
                                 <div className="text-black text-xl">
-                                    0
+                                    {carbs != null ? carbs : 0}
                                 </div>
                                 <div className="text-slate-500 text-sm">
                                     Avg. carbs
@@ -106,7 +131,7 @@ const Dashboard = ({username}: DashboardProps) => {
                             </div>
                             <div className="ml-4 flex flex-col">
                                 <div className="text-black text-xl">
-                                    0
+                                    {fat != null ? fat : 0}
                                 </div>
                                 <div className="text-slate-500 text-sm">
                                     Avg. fat

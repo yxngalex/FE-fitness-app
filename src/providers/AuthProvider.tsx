@@ -25,12 +25,14 @@ const AuthProvider: FC<IProps> = ({ children }) => {
     })
 
     const checkActiveToken = () => {
-        if (sessionStorage.getItem('token')) {
-            const token = sessionStorage.getItem('token');
+        if (localStorage.getItem('token')) {
+            const token = localStorage.getItem('token');
             if (token) {
                 console.log(`For debugging purposes, current token is:${token}`);
                 const decodedToken = jwtDecode<any>(token);
-                console.log(decodedToken);
+                console.log("Decoded token:", decodedToken);
+                console.log("Token expiration:", new Date(decodedToken.exp * 1000));
+                console.log("Current date:", new Date());
 
                 const dateNow = new Date();
                 if (decodedToken.exp * 1000 < dateNow.getTime()) {
@@ -42,7 +44,8 @@ const AuthProvider: FC<IProps> = ({ children }) => {
                 }
                 setAuth(prev => ({
                     ...prev,
-                    isAuthenticated: true
+                    isAuthenticated: true,
+                    user: decodedToken.username
                 }))
             }
         }
