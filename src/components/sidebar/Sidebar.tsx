@@ -1,11 +1,27 @@
 import {Dumbbell, EggFried, LayoutDashboard, LogOut, User2} from "lucide-react";
 import {Link, useLocation} from "react-router-dom";
+import {useContext} from "react";
+import {AuthContext} from "@/providers/AuthProvider.tsx";
 
 const Sidebar = () => {
     const location = useLocation();
+    const {setAuth} = useContext(AuthContext);
 
     const isActiveTab = (path: string) => {
         return location.pathname === path;
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+
+        if (setAuth) {
+            setAuth({
+                isAuthenticated: false,
+                user: 'Anonymous'
+            });
+        }
+
+        window.location.href = "/login";
     }
 
     return (
@@ -34,7 +50,8 @@ const Sidebar = () => {
                                 <div
                                     className="flex items-center justify-center text-center rounded-lg px-4 py-6 text-sm">
                                     <div>
-                                        <Dumbbell className={isActiveTab('/exercises') ? "text-blue-600" : "text-gray-400"}/>
+                                        <Dumbbell
+                                            className={isActiveTab('/exercises') ? "text-blue-600" : "text-gray-400"}/>
                                     </div>
                                     <span
                                         className={isActiveTab('/exercises') ? "text-black font-bold w-full flex ml-7" : "text-gray-400 w-full flex ml-7"}>Exercise</span>
@@ -84,14 +101,13 @@ const Sidebar = () => {
                 </div>
 
                 {/* Uncomment this section if you want a sticky footer */}
-                <div className="sticky inset-x-0 bottom-0 border-t border-gray-200">
-                    <Link to="/">
-                        <div
-                            className="flex justify-center items-center text-center rounded-lg hover:bg-slate-50 px-4 py-7 text-sm font-medium text-gray-700 gap-6">
-                            <LogOut/>
-                            <span>Logout</span>
-                        </div>
-                    </Link>
+                <div className="sticky inset-x-0 bottom-0 border-t border-gray-200 cursor-pointer hover:bg-blue-50">
+                    <div
+                        className="flex justify-center items-center text-center rounded-lg px-4 py-7 text-sm font-medium text-gray-700 gap-6"
+                        onClick={handleLogout}>
+                        <LogOut/>
+                        <span>Logout</span>
+                    </div>
                     {/*    <a href="#" className="flex items-center gap-2 bg-white p-4 hover:bg-gray-50">*/}
                     {/*        <img*/}
                     {/*            alt="Man"*/}
