@@ -74,7 +74,7 @@ const GoalCard = ({weightGoal, bodyTypeGoal, weeklyExercise, errorMessage, succe
     };
 
     return (
-        <Card className="w-[400px] h-[500px] bg-slate-50">
+        <Card className="w-[400px] h-[450px] bg-slate-50">
             <CardHeader>
                 <CardTitle className="justify-center items-center flex">Your Goal</CardTitle>
                 <CardDescription className="pt-2">Change the values if you want to update your goal.</CardDescription>

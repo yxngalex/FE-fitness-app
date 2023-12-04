@@ -4,6 +4,7 @@ import {getUserGoal} from "@/api/goal/goal.redaxios.ts";
 import {GoalDTO} from "@/model/GoalDTO.ts";
 import NutritionCard from "@/components/card/NutritionCard.tsx";
 import GoalCard from "@/components/card/GoalCard.tsx";
+import FoodEntries from "@/components/datatable/FoodEntries.tsx";
 
 interface DashboardProps {
     username: string,
@@ -68,10 +69,13 @@ const Dashboard = ({username, errorMessage, successMessage}: DashboardProps) => 
                 <span className="flex-1">Let's see your stats!</span>
             </div>
             <NutritionCard calories={calories} protein={protein} carbs={carbs} fat={fat}/>
-            <div className="mx-8 my-9">
+            <div className="flex mx-8 my-9">
                 {goal && <GoalCard bodyTypeGoal={goal!.bodyTypeGoal} weeklyExercise={goal!.weeklyExercise}
                                    weightGoal={goal!.weightGoal} errorMessage={errorMessage}
                                    successMessage={successMessage}/>}
+                <div className="flex-1 mx-10">
+                    <FoodEntries/>
+                </div>
             </div>
         </div>
     )
