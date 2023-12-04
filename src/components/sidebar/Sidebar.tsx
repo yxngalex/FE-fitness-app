@@ -82,25 +82,8 @@ const Sidebar = () => {
                                 </div>
                             </li>
                         </Link>
-                        {/*<Link to="/">*/}
-                        {/*    <li className="flex justify-center items-center w-full hover:bg-slate-50">*/}
-                        {/*        <div*/}
-                        {/*            className="flex items-center justify-center text-center rounded-lg px-4 py-6 text-sm ">*/}
-                        {/*            <div>*/}
-                        {/*                <LayoutDashboard*/}
-                        {/*                    className={isActiveTab('/test') ? "text-blue-600" : "text-gray-400"}/>*/}
-                        {/*            </div>*/}
-                        {/*            <span className="flex items-center ml-2">*/}
-                        {/*                <span*/}
-                        {/*                    className={isActiveTab('/test') ? "text-black font-bold flex ml-7" : "text-gray-400 font-bold w-full flex ml-7"}>Workouts</span>*/}
-                        {/*            </span>*/}
-                        {/*        </div>*/}
-                        {/*    </li>*/}
-                        {/*</Link>*/}
                     </ul>
                 </div>
-
-                {/* Uncomment this section if you want a sticky footer */}
                 <div className="sticky inset-x-0 bottom-0 border-t border-gray-200 cursor-pointer hover:bg-blue-50">
                     <div
                         className="flex justify-center items-center text-center rounded-lg px-4 py-7 text-sm font-medium text-gray-700 gap-6"

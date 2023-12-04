@@ -3,12 +3,15 @@ import {getOverviewNutrition} from "@/api/overview/overview.redaxios.ts";
 import {getUserGoal} from "@/api/goal/goal.redaxios.ts";
 import {GoalDTO} from "@/model/GoalDTO.ts";
 import NutritionCard from "@/components/card/NutritionCard.tsx";
+import GoalCard from "@/components/card/GoalCard.tsx";
 
 interface DashboardProps {
-    username: string
+    username: string,
+    errorMessage: (error: string | null) => void;
+    successMessage: (success: string | null) => void;
 }
 
-const Dashboard = ({username}: DashboardProps) => {
+const Dashboard = ({username, errorMessage, successMessage}: DashboardProps) => {
     const [greeting, setGreeting] = useState('');
     const [calories, setCalories] = useState(0);
     const [protein, setProtein] = useState(0);
@@ -47,7 +50,6 @@ const Dashboard = ({username}: DashboardProps) => {
 
     useEffect(() => {
         getUserGoal().then(r => {
-            console.log(r);
             const newGoalData: GoalDTO = {
                 weightGoal: r.weightGoal,
                 bodyTypeGoal: r.bodyTypeGoal,
@@ -57,7 +59,6 @@ const Dashboard = ({username}: DashboardProps) => {
             setGoal(newGoalData);
         })
 
-        console.log(goal)
     }, [])
 
     return (
@@ -67,7 +68,10 @@ const Dashboard = ({username}: DashboardProps) => {
                 <span className="flex-1">Let's see your stats!</span>
             </div>
             <NutritionCard calories={calories} protein={protein} carbs={carbs} fat={fat}/>
-            <div>
+            <div className="mx-8 my-9">
+                {goal && <GoalCard bodyTypeGoal={goal!.bodyTypeGoal} weeklyExercise={goal!.weeklyExercise}
+                                   weightGoal={goal!.weightGoal} errorMessage={errorMessage}
+                                   successMessage={successMessage}/>}
             </div>
         </div>
     )

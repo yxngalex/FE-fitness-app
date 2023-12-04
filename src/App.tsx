@@ -26,7 +26,7 @@ function App() {
                 <Route path="/login"
                        element={<Login setErrorMessage={setErrorMessage} setLoginMessage={setSuccessMessage}/>}/>
                 <Route path="/"
-                       element={auth?.isAuthenticated ? <Layout><Dashboard username={auth?.user}/></Layout> :
+                       element={auth?.isAuthenticated ? <Layout><Dashboard username={auth?.user} errorMessage={setErrorMessage} successMessage={setSuccessMessage}/></Layout> :
                            <Navigate to="/login"/>}/>
                 <Route path="/profile"
                        element={auth?.isAuthenticated ? <Layout><Profile/></Layout> :
