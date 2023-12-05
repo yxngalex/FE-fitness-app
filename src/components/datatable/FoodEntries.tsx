@@ -31,6 +31,7 @@ const FoodEntries = () => {
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
     const [tableData, setTableData] = useState<FoodEntry[]>([]);
+    const [pageSize, setPageSize] = useState(0);
 
 
     const columns: ColumnDef<FoodEntry>[] = [
@@ -61,10 +62,10 @@ const FoodEntries = () => {
             columnFilters,
             columnVisibility,
             rowSelection,
-            // pagination: {
-            //     pageIndex: 5
-            //     pageSize: 5
-            // }
+            pagination: {
+                pageIndex: pageSize,
+                pageSize: 5
+            }
         },
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -86,6 +87,15 @@ const FoodEntries = () => {
         }
     }, []);
 
+    const handleNext = () => {
+        setPageSize((prevPageSize) => prevPageSize + 1)
+    }
+
+    const handlePrevious = () => {
+        if (pageSize > 0) {
+            setPageSize((prevPageSize) => prevPageSize - 1)
+        }
+    }
 
     return (
         <div>
@@ -145,7 +155,7 @@ const FoodEntries = () => {
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => table.previousPage()}
+                        onClick={handlePrevious}
                         disabled={!table.getCanPreviousPage()}
                     >
                         Previous
@@ -153,7 +163,7 @@ const FoodEntries = () => {
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => table.nextPage()}
+                        onClick={handleNext}
                         disabled={!table.getCanNextPage()}
                     >
                         Next
