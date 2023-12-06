@@ -155,6 +155,7 @@ const FoodEntries = () => {
                     <Button
                         variant="outline"
                         size="sm"
+                        className="bg-slate-500 hover:bg-slate-400 text-white"
                         onClick={handlePrevious}
                         disabled={!table.getCanPreviousPage()}
                     >
@@ -163,6 +164,7 @@ const FoodEntries = () => {
                     <Button
                         variant="outline"
                         size="sm"
+                        className="bg-blue-600 hover:bg-blue-400 text-white"
                         onClick={handleNext}
                         disabled={!table.getCanNextPage()}
                     >
