@@ -64,7 +64,7 @@ const FoodEntries = () => {
             rowSelection,
             pagination: {
                 pageIndex: pageSize,
-                pageSize: 5
+                pageSize: 6
             }
         },
         getCoreRowModel: getCoreRowModel(),

@@ -39,3 +39,22 @@ export const getFoodEntries = async () => {
         throw e;
     }
 };
+
+export const calculateBmi = async () => {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('No authentication token found')
+        }
+
+        const response = await redaxios.get(`${BASE_URL}/calculateBmi`, {
+            headers: {
+                Authorization: `${token}`
+            }
+        });
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching data:', e)
+        throw e;
+    }
+};
