@@ -1,8 +1,6 @@
 import {useEffect, useState} from "react";
 import {autoCreateDays, getAllDays} from "@/api/day/day.redaxios.ts";
 import {Button} from "@/components/ui/button.tsx";
-import {Simulate} from "react-dom/test-utils";
-import loadedData = Simulate.loadedData;
 
 interface ExercisesProps {
     errorMessage: (error: string | null) => void;
@@ -15,7 +13,7 @@ const Exercises = ({errorMessage, successMessage}: ExercisesProps) => {
 
     useEffect(() => {
         loadData();
-    }, [errorMessage]);
+    }, []);
 
     const loadData = () => {
         getAllDays()
@@ -38,7 +36,7 @@ const Exercises = ({errorMessage, successMessage}: ExercisesProps) => {
             loadData()
             successMessage(r);
         }).catch(error => {
-            errorMessage(error);
+            errorMessage(error.data);
         })
     }
 
@@ -71,7 +69,7 @@ const Exercises = ({errorMessage, successMessage}: ExercisesProps) => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="bg-blue-600 hover:bg-blue-400 text-white"
+                                className="bg-blue-600 hover:bg-blue-400 text-white hover:text-white"
                                 onClick={handleAutoCreation}
                             >
                                 Auto Generate Plan
