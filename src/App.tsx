@@ -8,6 +8,7 @@ import SuccessAlert from "@/components/alert/SuccessAlert.tsx";
 import Layout from "@/components/layout/Layout.tsx";
 import Profile from "@/pages/profile/Profile.tsx";
 import Dashboard from "@/pages/dashboard/Dashboard.tsx";
+import Exercises from "@/pages/exercises/Exercises.tsx";
 
 function App() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -26,7 +27,13 @@ function App() {
                 <Route path="/login"
                        element={<Login setErrorMessage={setErrorMessage} setLoginMessage={setSuccessMessage}/>}/>
                 <Route path="/"
-                       element={auth?.isAuthenticated ? <Layout><Dashboard username={auth?.user} errorMessage={setErrorMessage} successMessage={setSuccessMessage}/></Layout> :
+                       element={auth?.isAuthenticated ?
+                           <Layout><Dashboard username={auth?.user} errorMessage={setErrorMessage}
+                                              successMessage={setSuccessMessage}/></Layout> :
+                           <Navigate to="/login"/>}/>
+                <Route path="/exercises"
+                       element={auth?.isAuthenticated ? <Layout><Exercises errorMessage={setErrorMessage}
+                                                                           successMessage={setSuccessMessage}/></Layout> :
                            <Navigate to="/login"/>}/>
                 <Route path="/profile"
                        element={auth?.isAuthenticated ? <Layout><Profile/></Layout> :

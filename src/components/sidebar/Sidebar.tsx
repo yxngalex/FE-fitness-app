@@ -45,7 +45,7 @@ const Sidebar = () => {
                                 </div>
                             </li>
                         </Link>
-                        <Link to="/exercise">
+                        <Link to="/exercises">
                             <li className="flex justify-center items-center w-full hover:bg-blue-50">
                                 <div
                                     className="flex items-center justify-center text-center rounded-lg px-4 py-6 text-sm">

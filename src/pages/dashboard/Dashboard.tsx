@@ -39,7 +39,6 @@ const Dashboard = ({username, errorMessage, successMessage}: DashboardProps) => 
 
     useEffect(() => {
         getOverviewNutrition().then(r => {
-                console.log(r);
                 setCalories(r.calories);
                 setProtein(r.protein);
                 setCarbs(r.carbs);
@@ -78,7 +77,7 @@ const Dashboard = ({username, errorMessage, successMessage}: DashboardProps) => 
                     <BMICalculator />
                 </div>
                 <div className="flex-2">
-                    <FoodEntries/>
+                    <FoodEntries errorMessage={errorMessage} />
                 </div>
             </div>
         </div>

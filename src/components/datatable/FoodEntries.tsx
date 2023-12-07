@@ -25,7 +25,11 @@ const mapFoodEntryDTOToFoodEntry = (entry: FoodEntryDTO): FoodEntry[] => {
     }));
 };
 
-const FoodEntries = () => {
+interface FoodEntriesProps {
+    errorMessage: (error: string | null) => void;
+}
+
+const FoodEntries = ({errorMessage}: FoodEntriesProps) => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -80,6 +84,8 @@ const FoodEntries = () => {
                 const mappedData = data.flatMap(mapFoodEntryDTOToFoodEntry);
                 setTableData(mappedData);
             }
+        }).catch(error => {
+            errorMessage(error);
         });
 
         return () => {

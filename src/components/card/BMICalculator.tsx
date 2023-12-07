@@ -16,7 +16,6 @@ const BMICalculator = () => {
 
                 if (result && typeof result.bmi === 'number') {
                     setData(result);
-                    console.log(result);
                 } else {
                     console.error('Invalid BMI value in API response:', result);
                 }
