@@ -62,7 +62,7 @@ const Exercises = ({errorMessage, successMessage}: ExercisesProps) => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="bg-slate-500 hover:bg-slate-400 text-white mr-2"
+                                className="bg-slate-500 hover:bg-slate-400 text-white mr-2 hover:text-white"
                             >
                                 Create Manual Plan
                             </Button>
@@ -74,6 +74,13 @@ const Exercises = ({errorMessage, successMessage}: ExercisesProps) => {
                             >
                                 Auto Generate Plan
                             </Button>
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium mt-10">
+                                Note: The system generates days with workout routines based on your preferences,
+                                factoring in your desired
+                                weekly exercise, weight goal, and primary fitness objective.
+                            </p>
                         </div>
                     </div>
                 </div>

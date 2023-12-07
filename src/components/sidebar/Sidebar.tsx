@@ -26,7 +26,7 @@ const Sidebar = () => {
 
     return (
         <>
-            <div className="flex flex-col h-screen w-[250px] justify-between border-e bg-slate-50">
+            <div className="hidden lg:flex flex-col h-screen w-[250px] justify-between border-e bg-slate-50">
                 <div className="px-4 py-6 text-center">
                     <span className="text-xl text-gray-600 font-medium"> FitnessApp </span>
                     <ul className="mt-6 block items-center justify-center">
@@ -105,6 +105,78 @@ const Sidebar = () => {
                     {/*            </p>*/}
                     {/*        </div>*/}
                     {/*    </a>*/}
+                </div>
+            </div>
+            <div className="lg:hidden">
+                <div className="flex h-screen w-16 flex-col justify-between border-e bg-white">
+                    <div>
+                        <div className="inline-flex h-16 w-16 items-center justify-center">
+                            <span
+                                className="grid h-10 w-10 place-content-center rounded-lg bg-blue-50 text-xs text-gray-600">
+                                FA
+                            </span>
+                        </div>
+                        <div className="border-t border-gray-100">
+                            <div className="px-2">
+                                <ul className="space-y-1 border-t border-gray-100 pt-4">
+                                    <li className="py-4">
+                                        <Link to="/"
+                                              className="group relative flex justify-center rounded px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-blue-500">
+                                            <LayoutDashboard/>
+                                            <span
+                                                className="absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+                                                Dashboard
+                                            </span>
+                                        </Link>
+                                    </li>
+                                    <li className="py-4">
+                                        <Link
+                                            to="/exercises"
+                                            className="group relative flex justify-center rounded px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-blue-500">
+                                            <Dumbbell/>
+                                            <span
+                                                className="absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+                                                Exercises
+                                            </span>
+                                        </Link>
+                                    </li>
+                                    <li className="py-4">
+                                        <Link
+                                            to="/food"
+                                            className="group relative flex justify-center rounded px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-blue-500">
+                                            <EggFried/>
+                                            <span
+                                                className="absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+                                                Food
+                                            </span>
+                                        </Link>
+                                    </li>
+                                    <li className="py-4">
+                                        <Link
+                                            to="/profile"
+                                            className="group relative flex justify-center rounded px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-blue-500">
+                                            <User2/>
+                                            <span
+                                                className="absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+                                                Profile
+                                            </span>
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="sticky inset-x-0 bottom-0 border-t border-gray-100 bg-white p-2">
+                        <button
+                            onClick={handleLogout}
+                            className="group relative flex w-full justify-center rounded-lg px-2 py-1.5 text-sm text-gray-500 hover:bg-gray-50 hover:text-blue-500">
+                            <LogOut/>
+                            <span
+                                className="absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+                                    Logout
+                                </span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </>

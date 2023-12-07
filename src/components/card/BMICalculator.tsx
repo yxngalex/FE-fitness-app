@@ -29,8 +29,9 @@ const BMICalculator = () => {
         <Card className="w-[400px] h-[450px] bg-slate-50">
             <CardHeader>
                 <CardTitle className="justify-center items-center flex">Body Mass Index</CardTitle>
-                <CardDescription>The Body Mass Index (BMI) Calculator can be used to calculate BMI value and
-                    corresponding weight status while taking age into consideration.</CardDescription>
+                <CardDescription>The Body Mass Index (BMI) Calculator can be used to calculate BMI value with height and weight while taking age into consideration.
+                    <a href="https://en.wikipedia.org/wiki/Body_mass_index" target="_blank" className="ml-1 text-blue-500 underline">Read more here.</a>
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <div>

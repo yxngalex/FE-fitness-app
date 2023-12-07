@@ -242,7 +242,7 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input type="number" placeholder="Height in Kg" {...field}
+                                            <Input type="number" placeholder="Height in Cm" {...field}
                                                    className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
