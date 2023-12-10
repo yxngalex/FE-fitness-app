@@ -1,13 +1,22 @@
 import {useEffect, useState} from "react";
 import {autoCreateDays, getAllDays} from "@/api/day/day.redaxios.ts";
 import {Button} from "@/components/ui/button.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog.tsx";
+import Routine from "@/components/routine/Routine.tsx";
 
 interface ExercisesProps {
     errorMessage: (error: string | null) => void;
     successMessage: (success: string | null) => void;
 }
 
-const Exercises = ({errorMessage, successMessage}: ExercisesProps) => {
+const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
     const [showDialog, setShowDialog] = useState(false);
     const [contentLoaded, setContentLoaded] = useState(false);
 
@@ -21,6 +30,7 @@ const Exercises = ({errorMessage, successMessage}: ExercisesProps) => {
                 if (Array.isArray(r) && r.length === 0) {
                     setShowDialog(true);
                 } else {
+                    console.log(r)
                     setContentLoaded(true);
                 }
             })
@@ -40,14 +50,10 @@ const Exercises = ({errorMessage, successMessage}: ExercisesProps) => {
         })
     }
 
-    const handleManualCreation = () => {
-        //TODO: handle manual creation
-    }
-
     return (
         <>
             {showDialog && (
-                <div className="flex justify-center items-center h-screen">
+                <div className="flex justify-center items-center h-full">
                     <div className="px-4 pb-2 pt-6 bg-white">
                         <div className="text-lg mb-4">
                             <p className="text-2xl font-bold">
@@ -59,13 +65,26 @@ const Exercises = ({errorMessage, successMessage}: ExercisesProps) => {
                             </p>
                         </div>
                         <div>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="bg-slate-500 hover:bg-slate-400 text-white mr-2 hover:text-white"
-                            >
-                                Create Manual Plan
-                            </Button>
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="bg-slate-500 hover:bg-slate-400 text-white mr-2 hover:text-white"
+                                    >
+                                        Create Manual Plan
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px] lg:max-w-[650px] lg:h-[800px]">
+                                    <DialogHeader>
+                                        <DialogTitle>Create a Workout Routine.</DialogTitle>
+                                        <DialogDescription>
+                                            To create a day with a workout routine you need to fill out the form.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <Routine successMessage={successMessage} errorMessage={errorMessage}/>
+                                </DialogContent>
+                            </Dialog>
                             <Button
                                 variant="outline"
                                 size="sm"
@@ -95,4 +114,4 @@ const Exercises = ({errorMessage, successMessage}: ExercisesProps) => {
 
 }
 
-export default Exercises;
+export default Exercise;

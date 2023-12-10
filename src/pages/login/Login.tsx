@@ -10,6 +10,9 @@ import {quotes} from "@/data/quotes.ts";
 import {loginUser} from "@/api/auth/auth.redaxios.ts";
 import {AuthContext} from "@/providers/AuthProvider.tsx";
 import {useNavigate} from "react-router-dom";
+import {useToast} from "@/components/ui/use-toast.ts";
+import {welcomeTrophy} from "@/api/trophy/trophy.redaxios.ts";
+import {TrophyUserDTO} from "@/model/TrophyUserDTO.ts";
 
 
 interface Quote {
@@ -34,6 +37,7 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
     const [showRegister, setShowRegister] = useState(false);
     const [randomQuote, setRandomQuote] = useState<Partial<Quote>>({});
     const {auth, setAuth} = useContext(AuthContext);
+    const {toast} = useToast();
     const navigate = useNavigate();
     const imgUrl = "https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
     const bgColor = "#f9f9f9";
@@ -80,13 +84,19 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
                     setAuth({
                         isAuthenticated: true,
                         user: values.username
-                    })
+                    });
+
+                    toast({
+                        title: 'Trophy Earned',
+                        description: 'Congratulations!',
+                        duration: 5000
+                    });
                 }
-            }
-        ).catch(e => {
-            console.error(e)
-            setErrorMessage(e.data)
-        });
+            })
+            .catch((e) => {
+                console.error(e);
+                setErrorMessage(e.data);
+            });
     }
 
     useEffect(() => {

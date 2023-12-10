@@ -45,16 +45,16 @@ const Sidebar = () => {
                                 </div>
                             </li>
                         </Link>
-                        <Link to="/exercises">
+                        <Link to="/exercise">
                             <li className="flex justify-center items-center w-full hover:bg-blue-50">
                                 <div
                                     className="flex items-center justify-center text-center rounded-lg px-4 py-6 text-sm">
                                     <div>
                                         <Dumbbell
-                                            className={isActiveTab('/exercises') ? "text-blue-600" : "text-gray-400"}/>
+                                            className={isActiveTab('/exercise') ? "text-blue-600" : "text-gray-400"}/>
                                     </div>
                                     <span
-                                        className={isActiveTab('/exercises') ? "text-black font-bold w-full flex ml-7" : "text-gray-400 w-full flex ml-7"}>Exercise</span>
+                                        className={isActiveTab('/exercise') ? "text-black font-bold w-full flex ml-7" : "text-gray-400 w-full flex ml-7"}>Exercise</span>
                                 </div>
                             </li>
                         </Link>

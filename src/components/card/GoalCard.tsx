@@ -125,7 +125,7 @@ const GoalCard = ({weightGoal, bodyTypeGoal, weeklyExercise, errorMessage, succe
                                                 <select
                                                     value={form.getValues("bodyTypeGoal") || bodyTypeGoal || ""}
                                                     onChange={(e) => form.setValue("bodyTypeGoal", e.target.value)}
-                                                    className="w-full h-10 px-3 mt-1 mb-2 text-base placeholder-gray-600 border rounded-md appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300"
+                                                    className="w-full cursor-pointer h-10 px-3 mt-1 mb-2 text-base placeholder-gray-600 border rounded-md appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300"
                                                 >
                                                     <option value="" disabled>Select</option>
                                                     {bodyTypes.map((bodyType) => (
