@@ -1,7 +1,8 @@
 import redaxios from "redaxios";
+import {DayDTO} from "@/model/DayDTO.ts";
 
 const BASE_URL = "http://localhost:8080/api/day";
-export const getDayByDate = async (date: Date) => {
+export const getDayByDate = async (date: Date): Promise<DayDTO> => {
     const token = localStorage.getItem('token');
     const isoDateString = date.toISOString();
 
@@ -21,7 +22,7 @@ export const getDayByDate = async (date: Date) => {
     }
 };
 
-export const getAllDays = async () => {
+export const getAllDays = async (): Promise<DayDTO> => {
     try {
         const token = localStorage.getItem('token');
         if (!token) {

@@ -75,8 +75,8 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
                                         Create Manual Plan
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="sm:max-w-[425px] lg:max-w-[650px] lg:h-[800px]">
-                                    <DialogHeader>
+                                <DialogContent className="sm:max-w-[425px] lg:max-w-[650px]">
+                                    <DialogHeader className="">
                                         <DialogTitle>Create a Workout Routine.</DialogTitle>
                                         <DialogDescription>
                                             To create a day with a workout routine you need to fill out the form.
