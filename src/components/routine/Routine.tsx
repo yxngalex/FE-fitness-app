@@ -7,15 +7,16 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {ChangeEvent, useEffect, useState} from "react";
 import {ExerciseDTO} from "@/model/ExerciseDTO.ts";
 import {getAllExercise} from "@/api/exercise/exercise.redaxios.ts";
-import {ExerciseStatsDTO} from "@/model/ExerciseStatsDTO.ts";
+// import {ExerciseStatsDTO} from "@/model/ExerciseStatsDTO.ts";
 import {CategoryDTO} from "@/model/CategoryDTO.ts";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
 import {cn} from "@/lib/utils.ts";
-import {CalendarIcon} from "lucide-react";
+import {CalendarIcon, XCircle} from "lucide-react";
 import {format} from "date-fns";
 import {Calendar} from "@/components/ui/calendar.tsx";
 import {getAllCategories} from "@/api/category/category.redaxios.ts";
 import {Label} from "@/components/ui/label.tsx";
+import {Input} from "@/components/ui/input.tsx";
 
 
 interface RoutineProps {
@@ -24,12 +25,12 @@ interface RoutineProps {
 }
 
 const Routine = ({errorMessage, successMessage}: RoutineProps) => {
-    const [fetchedExerciseList, setFetchedExerciseList] = useState<ExerciseDTO[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<CategoryDTO | undefined>(undefined);
     const [fetchedCategoryList, setFetchedCategoryList] = useState<CategoryDTO[]>([]);
+    const [fetchedExerciseList, setFetchedExerciseList] = useState<ExerciseDTO[]>([]);
+    const [selectedExercisesList, setSelectedExercisesList] = useState<Array<ExerciseDTO | undefined>>([]);
     const [selectedExercise, setSelectedExercise] = useState<ExerciseDTO | undefined>(undefined);
-    const [selectedExercisesList, setSelectedExercisesList] = useState<Array<ExerciseStatsDTO>>([]);
-    const [date, setDate] = useState<Date>()
+    const [date, setDate] = useState<Date>();
 
     useEffect(() => {
         getAllExercise().then(r => {
@@ -76,9 +77,21 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
     })
 
     const handleExerciseChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        event.preventDefault();
+
         const selectedExerciseName = event.target.value;
-        const exercise = fetchedExerciseList.find((ex) => ex.exerciseName === selectedExerciseName);
-        setSelectedExercise(exercise);
+
+        const isExerciseAlreadySelected = selectedExercisesList.some(
+            (ex) => ex?.exerciseName === selectedExerciseName
+        );
+
+        if (!isExerciseAlreadySelected) {
+            const exercise = fetchedExerciseList.find((ex) => ex.exerciseName === selectedExerciseName);
+            const updatedExerciseList = [...selectedExercisesList, exercise];
+            setSelectedExercisesList(updatedExerciseList);
+
+            setSelectedExercise(exercise);
+        }
     };
 
     const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -131,7 +144,25 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
                     </FormItem>
                     {selectedExercisesList.length > 0 && (
                         <div>
-                            <p>Selected Exercises:</p>
+                            {
+                                selectedExercisesList.map((item, index) => (
+                                    <div className="flex items-center gap-4 my-3 justify-between w-full" key={index} >
+                                        <div className="flex align-center gap-3">
+                                            <div>
+                                        {item?.exerciseName}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center ml-5 gap-3">
+                                                <Input className="w-[100px]" placeholder="Sets"/>
+                                                <Input className="w-[100px]" placeholder="Reps"/>
+                                                <Input className="w-[100px]" placeholder="Weight"/>
+                                            <XCircle className="text-red-500 cursor-pointer" onClick={() => handleRemoveExercise(index)} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            }
                         </div>
                     )}
                     <div className="my-6">
