@@ -9,6 +9,7 @@ import Layout from "@/components/layout/Layout.tsx";
 import Profile from "@/pages/profile/Profile.tsx";
 import Dashboard from "@/pages/dashboard/Dashboard.tsx";
 import Exercise from "@/pages/exercise/Exercise.tsx";
+import Food from "@/pages/food/Food.tsx";
 
 function App() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -34,6 +35,9 @@ function App() {
                 <Route path="/exercise"
                        element={auth?.isAuthenticated ? <Layout><Exercise errorMessage={setErrorMessage}
                                                                           successMessage={setSuccessMessage}/></Layout> :
+                           <Navigate to="/login"/>}/>
+                <Route path="/food"
+                       element={auth?.isAuthenticated ? <Layout><Food errorMessage={setErrorMessage} successMessage={setSuccessMessage}/></Layout> :
                            <Navigate to="/login"/>}/>
                 <Route path="/profile"
                        element={auth?.isAuthenticated ? <Layout><Profile/></Layout> :

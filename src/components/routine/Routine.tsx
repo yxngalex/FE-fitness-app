@@ -76,6 +76,8 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
         },
     })
 
+    const {register, handleSubmit} = form;
+
     const handleExerciseChange = (event: ChangeEvent<HTMLSelectElement>) => {
         event.preventDefault();
 
@@ -100,31 +102,21 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
         setSelectedCategory(category);
     };
 
-    // const handleAddExercise = () => {
-    //     if (selectedExercise) {
-    //         const {set, reps, exerciseWeight} = form.getValues();
-    //         const newExercise: ExerciseStatsDTO = {
-    //             set: Number(set),
-    //             reps: Number(reps),
-    //             exerciseWeight: Number(exerciseWeight),
-    //             exerciseDTO: selectedExercise,
-    //         };
-    //         setSelectedExercisesList((prevList: ExerciseStatsDTO[]) => [...prevList, newExercise]);
-    //         form.reset();
-    //     }
-    // };
-
     const handleRemoveExercise = (index: number) => {
         const updatedList = [...selectedExercisesList];
         updatedList.splice(index, 1);
         setSelectedExercisesList(updatedList);
     };
 
+    const onSubmit = (data) => {
+        console.log(data)
+    }
+
 
     return (
         <div className="">
             <Form {...form}>
-                <form onSubmit={(e) => e.preventDefault()}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <FormItem className="my-6">
                         <label htmlFor="exercise">Select an Exercise</label>
                         <select
@@ -154,9 +146,9 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
                                         </div>
                                         <div>
                                             <div className="flex items-center ml-5 gap-3">
-                                                <Input className="w-[100px]" placeholder="Sets"/>
-                                                <Input className="w-[100px]" placeholder="Reps"/>
-                                                <Input className="w-[100px]" placeholder="Weight"/>
+                                                <Input type="number" className="w-[100px]" placeholder="Sets" {...register(`set`)}/>
+                                                <Input type="number" className="w-[100px]" placeholder="Reps"/>
+                                                <Input type="number" className="w-[100px]" placeholder="Weight"/>
                                             <XCircle className="text-red-500 cursor-pointer" onClick={() => handleRemoveExercise(index)} />
                                             </div>
                                         </div>

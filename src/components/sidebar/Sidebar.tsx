@@ -70,18 +70,18 @@ const Sidebar = () => {
                                 </div>
                             </li>
                         </Link>
-                        <Link to="/profile">
-                            <li className="flex justify-center items-center w-full hover:bg-blue-50">
-                                <div
-                                    className="flex items-center justify-center text-center rounded-lg px-4 py-6 text-sm">
-                                    <div>
-                                        <User2 className={isActiveTab('/profile') ? "text-blue-600" : "text-gray-400"}/>
-                                    </div>
-                                    <span
-                                        className={isActiveTab('/profile') ? "text-black font-bold w-full flex ml-7" : "text-gray-400 w-full flex ml-7"}>Profile</span>
-                                </div>
-                            </li>
-                        </Link>
+                        {/*<Link to="/profile">*/}
+                        {/*    <li className="flex justify-center items-center w-full hover:bg-blue-50">*/}
+                        {/*        <div*/}
+                        {/*            className="flex items-center justify-center text-center rounded-lg px-4 py-6 text-sm">*/}
+                        {/*            <div>*/}
+                        {/*                <User2 className={isActiveTab('/profile') ? "text-blue-600" : "text-gray-400"}/>*/}
+                        {/*            </div>*/}
+                        {/*            <span*/}
+                        {/*                className={isActiveTab('/profile') ? "text-black font-bold w-full flex ml-7" : "text-gray-400 w-full flex ml-7"}>Profile</span>*/}
+                        {/*        </div>*/}
+                        {/*    </li>*/}
+                        {/*</Link>*/}
                     </ul>
                 </div>
                 <div className="sticky inset-x-0 bottom-0 border-t border-gray-200 cursor-pointer hover:bg-blue-50">
@@ -131,7 +131,7 @@ const Sidebar = () => {
                                     </li>
                                     <li className="py-4">
                                         <Link
-                                            to="/exercises"
+                                            to="/exercise"
                                             className="group relative flex justify-center rounded px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-blue-500">
                                             <Dumbbell/>
                                             <span
