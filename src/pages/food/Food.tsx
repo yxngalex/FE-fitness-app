@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getAllDays, getClosestDay, getDayByDate} from "@/api/day/day.redaxios.ts";
+import {getAllDays, getClosestDay, getDayByDate, getlastLoggedDate} from "@/api/day/day.redaxios.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {Link} from "react-router-dom";
 import {DayDTO} from "@/model/DayDTO.ts";
@@ -7,6 +7,7 @@ import {ArrowLeft, ArrowRight} from "lucide-react";
 import BMRCalculatorCard from "@/components/card/BMRCalculatorCard.tsx";
 import DailyNutritionCard from "@/components/card/DailyNutritionCard.tsx";
 import DietDailyPlanCard from "@/components/card/DietCard.tsx";
+import {DialogClose} from "@/components/ui/dialog.tsx";
 
 interface FoodProps {
     errorMessage: (error: string | null) => void;
@@ -73,6 +74,7 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
         }
     };
 
+
     const handleNextDay = async () => {
         if (currentDay) {
             const currentDayDate = new Date(currentDay.loggedDate);
@@ -126,15 +128,31 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
                 <div>
                     <div className="p-8 block">
                         <div className="flex justify-between items-center">
-                            <span className="text-4xl pb-6 font-bold">
-                                {currentDay && new Date(currentDay.loggedDate).toDateString() === new Date().toDateString()
-                                    ? 'Today'
-                                    : currentDay
-                                        ? new Date(currentDay.loggedDate).toLocaleDateString('en-US', {
-                                            day: 'numeric',
-                                            month: 'short',
-                                        })
-                                        : ''}
+                            <span className="text-4xl pb-3 font-bold">
+                                {currentDay && (
+                                    <>
+                                        {new Date(currentDay.loggedDate).toDateString() === new Date().toDateString()
+                                            ? (
+                                                <>
+                                                    <div className="">Today</div>
+                                                    <div
+                                                        className="text-lg">{new Date(currentDay.loggedDate).toLocaleDateString('en-US', {
+                                                        day: 'numeric',
+                                                        month: 'short',
+                                                    })}</div>
+                                                </>
+                                            )
+                                            : (
+                                                <div>
+                                                    {new Date(currentDay.loggedDate).toLocaleDateString('en-US', {
+                                                        day: 'numeric',
+                                                        month: 'short',
+                                                    })}
+                                                </div>
+                                            )
+                                        }
+                                    </>
+                                )}
                             </span>
                             <div className="flex gap-4">
                                 <Button
