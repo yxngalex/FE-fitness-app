@@ -10,7 +10,7 @@ interface BMRCalculatorProps {
 }
 
 
-const BMRCalculator = ({data, calories}: BMRCalculatorProps) => {
+const BMRCalculatorCard = ({data, calories}: BMRCalculatorProps) => {
     const [percentage, setPercentage] = useState(0);
     const [caloriesLabel, setCaloriesLabel] = useState(0);
 
@@ -58,4 +58,4 @@ const BMRCalculator = ({data, calories}: BMRCalculatorProps) => {
     );
 };
 
-export default BMRCalculator;
+export default BMRCalculatorCard;

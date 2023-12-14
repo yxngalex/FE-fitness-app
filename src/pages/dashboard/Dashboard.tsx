@@ -5,7 +5,7 @@ import {GoalDTO} from "@/model/GoalDTO.ts";
 import NutritionCard from "@/components/card/NutritionCard.tsx";
 import GoalCard from "@/components/card/GoalCard.tsx";
 import FoodEntries from "@/components/datatable/FoodEntries.tsx";
-import BMICalculator from "@/components/card/BMICalculator.tsx";
+import BMICalculatorCard from "@/components/card/BMICalculatorCard.tsx";
 
 interface DashboardProps {
     username: string,
@@ -74,7 +74,7 @@ const Dashboard = ({username, errorMessage, successMessage}: DashboardProps) => 
                                    weightGoal={goal!.weightGoal} errorMessage={errorMessage}
                                    successMessage={successMessage}/>}
                 <div className="flex-1 mx-10">
-                    <BMICalculator />
+                    <BMICalculatorCard />
                 </div>
                 <div className="flex-2">
                     <FoodEntries errorMessage={errorMessage} />

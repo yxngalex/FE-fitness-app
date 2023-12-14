@@ -4,7 +4,7 @@ import GaugeComponent from 'react-gauge-component'
 import {calculateBmi} from "@/api/overview/overview.redaxios.ts";
 import {BmiDTO} from "@/model/BmiDTO.ts";
 
-const BMICalculator = () => {
+const BMICalculatorCard = () => {
     const [data, setData] = useState<BmiDTO | null>(null);
 
     useEffect(() => {
@@ -68,4 +68,4 @@ const BMICalculator = () => {
     );
 };
 
-export default BMICalculator;
+export default BMICalculatorCard;

@@ -4,7 +4,9 @@ import {Button} from "@/components/ui/button.tsx";
 import {Link} from "react-router-dom";
 import {DayDTO} from "@/model/DayDTO.ts";
 import {ArrowLeft, ArrowRight} from "lucide-react";
-import BMRCalculator from "@/components/card/BMRCalculator.tsx";
+import BMRCalculatorCard from "@/components/card/BMRCalculatorCard.tsx";
+import DailyNutritionCard from "@/components/card/DailyNutritionCard.tsx";
+import DietDailyPlanCard from "@/components/card/DietCard.tsx";
 
 interface FoodProps {
     errorMessage: (error: string | null) => void;
@@ -151,11 +153,16 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
                             </div>
                         </div>
                     </div>
-                    <div className="w-full my-12">
-                        { currentDay && <BMRCalculator data={currentDay?.bmr}  calories={currentDay?.nutritionDTO?.calories} /> }
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                    <div className="flex justify-center items-center w-full my-16 mx-5">
+                        {currentDay &&
+                            <BMRCalculatorCard data={currentDay?.bmr} calories={currentDay?.nutritionDTO?.calories}/>}
+                        {currentDay && <DailyNutritionCard calories={currentDay?.nutritionDTO?.calories}
+                                                           carbs={currentDay?.nutritionDTO?.carbs}
+                                                           fat={currentDay?.nutritionDTO?.fat}
+                                                           protein={currentDay?.nutritionDTO?.protein}/>}
+                        {currentDay && <DietDailyPlanCard errorMessage={errorMessage}
+                                                          day={currentDay}
+                                                          successMessage={successMessage}/>}
                     </div>
                 </div>
             )}
