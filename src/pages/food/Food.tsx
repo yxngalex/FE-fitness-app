@@ -4,6 +4,7 @@ import {Button} from "@/components/ui/button.tsx";
 import {Link} from "react-router-dom";
 import {DayDTO} from "@/model/DayDTO.ts";
 import {ArrowLeft, ArrowRight} from "lucide-react";
+import BMRCalculator from "@/components/card/BMRCalculator.tsx";
 
 interface FoodProps {
     errorMessage: (error: string | null) => void;
@@ -149,6 +150,12 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
                                 </Button>
                             </div>
                         </div>
+                    </div>
+                    <div className="w-full">
+                        { currentDay && <BMRCalculator data={currentDay?.bmr}  calories={currentDay?.nutritionDTO?.calories} /> }
+                        <div></div>
+                        <div></div>
+                        <div></div>
                     </div>
                 </div>
             )}
