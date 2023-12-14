@@ -151,7 +151,7 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
                             </div>
                         </div>
                     </div>
-                    <div className="w-full">
+                    <div className="w-full my-12">
                         { currentDay && <BMRCalculator data={currentDay?.bmr}  calories={currentDay?.nutritionDTO?.calories} /> }
                         <div></div>
                         <div></div>
