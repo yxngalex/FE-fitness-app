@@ -7,7 +7,6 @@ import {ArrowLeft, ArrowRight} from "lucide-react";
 import BMRCalculatorCard from "@/components/card/BMRCalculatorCard.tsx";
 import DailyNutritionCard from "@/components/card/DailyNutritionCard.tsx";
 import DietDailyPlanCard from "@/components/card/DietCard.tsx";
-import {DialogClose} from "@/components/ui/dialog.tsx";
 
 interface FoodProps {
     errorMessage: (error: string | null) => void;

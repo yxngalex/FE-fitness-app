@@ -3,8 +3,8 @@ import {FoodDTO} from "@/model/FoodDTO.ts";
 import {NutritionDTO} from "@/model/NutritionDTO.ts";
 
 export interface MealDTO {
-    day: DayDTO;
-    foodEntries: FoodDTO[];
-    nutritionDTO: NutritionDTO;
+    dayDTO: DayDTO;
+    foodList: FoodDTO[];
+    nutrition: NutritionDTO | null;
     mealName: string;
 }
