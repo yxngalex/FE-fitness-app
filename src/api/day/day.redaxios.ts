@@ -114,3 +114,19 @@ export const autoCreateDays = async () => {
         throw e;
     }
 };
+
+export const createDay = async (day: DayDTO): Promise<string> => {
+    try {
+        const token = localStorage.getItem('token');
+
+        const response = await redaxios.post(`${BASE_URL}/create/`, day, {
+            headers: {
+                Authorization: `${token}`
+            }
+        });
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching data:', e);
+        throw e;
+    }
+};

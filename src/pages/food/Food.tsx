@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getAllDays, getClosestDay, getDayByDate, getlastLoggedDate} from "@/api/day/day.redaxios.ts";
+import {getAllDays, getClosestDay, getDayByDate} from "@/api/day/day.redaxios.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {Link} from "react-router-dom";
 import {DayDTO} from "@/model/DayDTO.ts";
@@ -18,10 +18,11 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
     const [contentLoaded, setContentLoaded] = useState(false);
     const [daysLoaded, setDaysLoaded] = useState<DayDTO[]>([]);
     const [currentDay, setCurrentDay] = useState<DayDTO | null>(null);
+    const [refreshTrigger, setRefreshTrigger] = useState<boolean>(false);
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [refreshTrigger]);
 
     const loadData = () => {
         getAllDays()
@@ -179,6 +180,8 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
                                                            protein={currentDay?.nutritionDTO?.protein}/>}
                         {currentDay && <DietDailyPlanCard errorMessage={errorMessage}
                                                           day={currentDay}
+                                                          refreshTrigger={refreshTrigger}
+                                                          setRefreshTrigger={setRefreshTrigger}
                                                           successMessage={successMessage}/>}
                     </div>
                 </div>

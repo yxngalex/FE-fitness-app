@@ -2,7 +2,7 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx
 import {useEffect, useState} from "react";
 import 'react-circular-progressbar/dist/styles.css';
 import {MealDTO} from "@/model/MealDTO.ts";
-import {createMeal, getAllMealsInaDay} from "@/api/meal/meal.redaxios.ts";
+import {createMeal, deleteMeal, getAllMealsInaDay} from "@/api/meal/meal.redaxios.ts";
 import {DayDTO} from "@/model/DayDTO.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {
@@ -15,9 +15,8 @@ import {
 import {Input} from "@/components/ui/input.tsx";
 import {getAutocompleteFood} from "@/api/food/food.redaxios.ts";
 import {FoodDTO} from "@/model/FoodDTO.ts";
-import {XCircle} from "lucide-react";
+import {Pen, XCircle} from "lucide-react";
 import {Label} from "@/components/ui/label.tsx";
-import {NutritionDTO} from "@/model/NutritionDTO.ts";
 import {useForm} from "react-hook-form";
 import {FormItem} from "@/components/ui/form.tsx";
 
@@ -25,21 +24,29 @@ import {FormItem} from "@/components/ui/form.tsx";
 interface DietDailyPlanProps {
     errorMessage: (error: string | null) => void;
     successMessage: (success: string | null) => void;
+    refreshTrigger: boolean;
+    setRefreshTrigger: (value: boolean) => void;
     day: DayDTO;
 }
 
 
-const DietDailyPlanCard = ({errorMessage, successMessage, day}: DietDailyPlanProps) => {
+const DietDailyPlanCard = ({
+                               errorMessage,
+                               successMessage,
+                               day,
+                               refreshTrigger,
+                               setRefreshTrigger
+                           }: DietDailyPlanProps) => {
         const [mealList, setMealList] = useState<MealDTO[]>([]);
         const [foodSuggestions, setFoodSuggestions] = useState<FoodDTO[]>([]);
         const [selectedFood, setSelectedFood] = useState<FoodDTO[]>([]);
+
 
         useEffect(() => {
             let mounted = true;
 
             if (day != null) {
                 getAllMealsInaDay(day).then(result => {
-                    console.log(result)
                     if (mounted) {
                         if (result && Array.isArray(result)) {
                             setMealList(result);
@@ -51,25 +58,53 @@ const DietDailyPlanCard = ({errorMessage, successMessage, day}: DietDailyPlanPro
                 });
             }
             console.log(mealList);
-        }, []);
+        }, [day]);
 
         type FormValues = {
             mealName: string;
-            day: DayDTO;
-            nutrition: NutritionDTO | null;
-            food: FoodDTO[];
+            serving: number;
         }
 
         const form = useForm<FormValues>({
             defaultValues: {
                 mealName: '',
-                day: day,
-                nutrition: null,
-                food: selectedFood
+                serving: 1
             },
         });
 
         const {register, handleSubmit} = form;
+
+
+        const handleAutocomplete = (input: string) => {
+            console.log(input);
+            if (input) {
+                getAutocompleteFood(input).then(r => {
+                    setFoodSuggestions(r);
+                }).catch(error => {
+                    errorMessage(error.data);
+                })
+            }
+        }
+
+        const handleSuggestion = (suggestion: FoodDTO) => {
+            setSelectedFood([...selectedFood, suggestion]);
+            setFoodSuggestions([]);
+        }
+
+        const handleRemoveFood = (index: number) => {
+            const updatedList = [...selectedFood];
+            updatedList.splice(index, 1);
+            setSelectedFood(updatedList);
+        }
+
+        const handleRemoveMeal = (meal: MealDTO) => {
+            deleteMeal(meal).then(r => {
+                successMessage(r);
+                setRefreshTrigger(!refreshTrigger);
+            }, error => {
+                errorMessage(error.data);
+            });
+        }
 
         const onSubmit = async () => {
             await form.trigger()
@@ -83,35 +118,12 @@ const DietDailyPlanCard = ({errorMessage, successMessage, day}: DietDailyPlanPro
 
             createMeal(mealWrapper).then(r => {
                 successMessage(r);
+                setRefreshTrigger(!refreshTrigger);
+                console.log('Refresh triggered:', refreshTrigger);
             }).catch(error => {
                 errorMessage(error.data);
             });
         }
-
-        const handleAutocomplete = (input: string) => {
-            console.log(input);
-            if (input) {
-                getAutocompleteFood(input).then(r => {
-                    setFoodSuggestions(r);
-                    console.log(foodSuggestions)
-                }).catch(error => {
-                    errorMessage(error.data);
-                })
-            }
-        }
-
-        const handleSuggestion = (suggestion: FoodDTO) => {
-            setSelectedFood([...selectedFood, suggestion]);
-            setFoodSuggestions([]);
-            console.log(selectedFood)
-        }
-
-        const handleRemoveFood = (index: number) => {
-            const updatedList = [...selectedFood];
-            updatedList.splice(index, 1);
-            setSelectedFood(updatedList);
-        }
-
 
         return (
             <Card className="w-[600px] h-[550px] bg-slate-50">
@@ -123,9 +135,36 @@ const DietDailyPlanCard = ({errorMessage, successMessage, day}: DietDailyPlanPro
                         {mealList.length > 0 && (
                             <div>
                                 {mealList.map((meal, index) => (
-                                    <div key={index}>
-                                        {meal.mealName}
-                                        Foods: {meal.foodList.length}
+                                    <div className="flex items-center gap-4 my-6 justify-between w-full" key={index}>
+                                        <Dialog>
+                                            <div className="flex align-center gap-3">
+                                                {meal.mealName}
+                                            </div>
+                                            <div className="flex items-center ml-5 gap-3">
+                                                Foods: {meal.foodList.length}
+                                            </div>
+                                            <div className="flex items-center ml-5">
+                                                <DialogTrigger asChild>
+                                                    <Button className="bg-transparent hover:bg-transparent">
+                                                        <Pen className="text-blue-500 cursor-pointer"/>
+                                                    </Button>
+                                                </DialogTrigger>
+                                            </div>
+                                            <div className="flex items-center ml-2">
+                                                <XCircle className="text-red-500 cursor-pointer"
+                                                         onClick={() => handleRemoveMeal(meal)}/>
+                                            </div>
+                                            <DialogContent>
+                                                <DialogHeader>
+                                                    <div>
+                                                        test
+                                                    </div>
+                                                    <div>
+
+                                                    </div>
+                                                </DialogHeader>
+                                            </DialogContent>
+                                        </Dialog>
                                     </div>
                                 ))}
                             </div>
@@ -193,9 +232,12 @@ const DietDailyPlanCard = ({errorMessage, successMessage, day}: DietDailyPlanPro
                                                                     <div>
                                                                         <div className="flex items-center ml-5 gap-3">
                                                                             <Label>Serving: </Label>
-                                                                            <Input type="number" className="w-[100px]"
+                                                                            <Input type="number"
+                                                                                   className="w-[100px]"
                                                                                    placeholder="Reps"
-                                                                                   defaultValue={item?.serving}/>
+                                                                                   defaultValue={item?.serving}
+                                                                                   {...register(`serving`)}
+                                                                            />
                                                                             <XCircle className="text-red-500 cursor-pointer"
                                                                                      onClick={() => handleRemoveFood(index)}/>
                                                                         </div>
