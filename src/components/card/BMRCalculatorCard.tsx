@@ -5,8 +5,8 @@ import 'react-circular-progressbar/dist/styles.css';
 
 
 interface BMRCalculatorProps {
-    data: number;
-    calories: number;
+    data: number | null;
+    calories: number | undefined;
 }
 
 
@@ -15,12 +15,14 @@ const BMRCalculatorCard = ({data, calories}: BMRCalculatorProps) => {
     const [caloriesLabel, setCaloriesLabel] = useState(0);
 
     useEffect(() => {
-        if (calories == null) {
+        if (calories == null || data == null) {
             setPercentage(0);
             setCaloriesLabel(0);
         } else {
-            setPercentage((calories / data) * 100);
-            setCaloriesLabel(calories);
+            const calculatedCalories = calories !== undefined ? calories : 0;
+
+            setPercentage((calculatedCalories / data) * 100);
+            setCaloriesLabel(calculatedCalories);
         }
     }, [calories, data]);
 

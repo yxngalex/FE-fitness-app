@@ -188,14 +188,14 @@ const DietDailyPlanCard = ({
         }
 
         return (
-            <Card className="w-[600px] h-[550px] bg-slate-50">
+            <Card className="w-[600px] relative min-h-[550px] h-full bg-slate-50 overflow-y-auto">
                 <CardHeader>
                     <CardTitle className="justify-center items-center flex">Diet daily plan</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="flex items-center justify-center">
+                    <div className="flex flex-col items-center bg-blue-100 rounded-md px-2 h-full justify-center">
                         {mealList.length > 0 && (
-                            <div>
+                            <>
                                 {mealList.map((meal, index) => (
                                     <div className="flex items-center gap-4 my-6 justify-between w-full" key={index}>
                                         <Dialog>
@@ -205,18 +205,18 @@ const DietDailyPlanCard = ({
                                             <div className="flex items-center ml-5 gap-3">
                                                 Foods: {meal.foodList.length}
                                             </div>
-                                            <div className="flex items-center ml-5">
+                                            <div className="flex gap-3 items-center ml-5">
                                                 <DialogTrigger asChild>
                                                     <Button className="bg-transparent hover:bg-transparent">
                                                         <Pen className="text-blue-500 cursor-pointer"
                                                              onClick={() => handleEditMeal(meal)}/>
                                                     </Button>
                                                 </DialogTrigger>
-                                            </div>
-                                            <div className="flex items-center ml-2">
                                                 <XCircle className="text-red-500 cursor-pointer"
                                                          onClick={() => handleRemoveMeal(meal)}/>
                                             </div>
+                                            {/*<div className="flex items-center ml-2">*/}
+                                            {/*</div>*/}
                                             <DialogContent>
                                                 <DialogHeader className="flex justify-center items-center">
                                                     <DialogTitle>
@@ -287,24 +287,26 @@ const DietDailyPlanCard = ({
                                         </Dialog>
                                     </div>
                                 ))}
-                                <div>
-                                    <Button className="bg-blue-600 hover:bg-blue-400 text-white hover:text-white">
+                                <div className="absolute bottom-5">
+                                    <Button className="bg-blue-600 self-end justify-self-end w-96 hover:bg-blue-400 text-white hover:text-white">
                                         New meal
                                     </Button>
                                 </div>
-                            </div>
+                            </>
                         )}
                         {mealList.length === 0 && (
-                            <div className="flex flex-col items-center justify-center mt-14">
-                                <div className="mb-4 text-center">
+                            <div className="flex flex-col items-center justify-center">
+                                <div className="p-5 text-center">
                                     There are no meals for this day.
                                 </div>
                                 <div className="flex items-center justify-center">
                                     <Dialog>
                                         <DialogTrigger asChild>
-                                            <Button className="bg-blue-600 hover:bg-blue-400 text-white hover:text-white">
+                                            <div className="absolute bottom-5">
+                                            <Button className="bg-blue-600 hover:bg-blue-400 w-96 text-white hover:text-white">
                                                 Add a meal
                                             </Button>
+                                            </div>
                                         </DialogTrigger>
                                         <DialogContent className="sm:max-w-[425px] lg:max-w-[550px]">
                                             <DialogHeader className="flex justify-center items-center">

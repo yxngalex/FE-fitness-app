@@ -12,7 +12,6 @@ import {AuthContext} from "@/providers/AuthProvider.tsx";
 import {useNavigate} from "react-router-dom";
 import {useToast} from "@/components/ui/use-toast.ts";
 import {welcomeTrophy} from "@/api/trophy/trophy.redaxios.ts";
-import {TrophyUserDTO} from "@/model/TrophyUserDTO.ts";
 
 
 interface Quote {
@@ -78,21 +77,26 @@ const Login = ({setErrorMessage, setLoginMessage}: Login) => {
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         console.log(values);
         loginUser(values.username, values.password).then(token => {
-                localStorage.setItem('token', token);
+            localStorage.setItem('token', token);
 
-                if (setAuth) {
-                    setAuth({
-                        isAuthenticated: true,
-                        user: values.username
-                    });
+            if (setAuth) {
+                setAuth({
+                    isAuthenticated: true,
+                    user: values.username
+                });
 
+                welcomeTrophy().then(r => {
                     toast({
-                        title: 'Trophy Earned',
-                        description: 'Congratulations!',
+                        title: r.trophy.trophyName,
+                        description: r.trophy.trophyDescription,
                         duration: 5000
                     });
-                }
-            })
+                }).catch(error => {
+                    setErrorMessage(error.data);
+                })
+
+            }
+        })
             .catch((e) => {
                 console.error(e);
                 setErrorMessage(e.data);

@@ -1,10 +1,10 @@
 import {Card, CardContent} from "@/components/ui/card.tsx";
 
 interface NutritionCardProps {
-    calories: number,
-    protein: number,
-    carbs: number,
-    fat: number
+    calories: number | undefined,
+    protein: number | undefined,
+    carbs: number | undefined,
+    fat: number | undefined
 }
 
 const DailyNutritionCard = ({calories, protein, carbs, fat}: NutritionCardProps) => {

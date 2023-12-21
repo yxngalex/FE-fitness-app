@@ -1,7 +1,8 @@
 import redaxios from "redaxios";
+import {TrophyUserDTO} from "@/model/TrophyUserDTO.ts";
 
 const BASE_URL = "http://localhost:8080/api/trophy";
-export const welcomeTrophy = async () => {
+export const welcomeTrophy = async (): Promise<TrophyUserDTO> => {
     try {
         const token = localStorage.getItem('token');
         if (!token) {
