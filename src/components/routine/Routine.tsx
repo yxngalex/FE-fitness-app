@@ -78,7 +78,7 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
         },
     });
 
-    const {register, handleSubmit, control, formState: {errors, isValid},} = form;
+    const {register, handleSubmit, control, formState: {isValid},} = form;
 
     const {fields, append, remove} = useFieldArray({
         name: "exerciseStats",
@@ -127,17 +127,6 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
 
-        const hasErrors = fields.some(
-            (field) =>
-                field.exercise.exerciseName &&
-                (!field.set || !field.reps || !field.exerciseWeight)
-        );
-
-        if (hasErrors) {
-            errorMessage('Please fill in all fields for the selected exercises.');
-            return;
-        }
-
         const {exerciseStats} = data;
 
         const exerciseStatsDTOArray: ExerciseStatsDTO[] = exerciseStats.map((stats) => ({
@@ -146,7 +135,7 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
             exerciseWeight: Number(stats.exerciseWeight),
             exerciseDTO: {
                 exerciseName: stats.exercise.exerciseName,
-                category: selectedCategory || fetchedCategoryList[8],
+                categoryDTO: selectedCategory || fetchedCategoryList[8],
                 exerciseDescription: '',
                 image: ''
             }
@@ -167,6 +156,8 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
             bmr: null,
             loggedDate: date !== undefined ? date : new Date(),
         }
+
+        console.log(dayDTO);
 
         createDay(dayDTO).then(r => {
             successMessage(r);
@@ -230,9 +221,6 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
                                                 onClick={() => handleRemoveExercise(index)}
                                             />
                                         </div>
-                                        {errors.exerciseStats?.[index] && (
-                                            <p>{errors.exerciseStats[index]?.message}</p>
-                                        )}
                                     </div>
                                 </div>
                             )}

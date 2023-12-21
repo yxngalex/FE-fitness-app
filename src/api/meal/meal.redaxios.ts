@@ -63,3 +63,20 @@ export const deleteMeal = async (meal: MealDTO): Promise<string> => {
         throw e;
     }
 };
+
+export const removeFoodFromMeal = async (meal: MealDTO): Promise<string> => {
+    try {
+        const token = localStorage.getItem('token');
+
+        const response = await redaxios.post(`${BASE_URL}/remove/`, meal, {
+            headers: {
+                Authorization: `${token}`
+            },
+        });
+
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching data:', e)
+        throw e;
+    }
+};

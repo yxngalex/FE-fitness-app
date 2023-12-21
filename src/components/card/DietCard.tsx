@@ -2,12 +2,14 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx
 import {useEffect, useState} from "react";
 import 'react-circular-progressbar/dist/styles.css';
 import {MealDTO} from "@/model/MealDTO.ts";
-import {createMeal, deleteMeal, getAllMealsInaDay} from "@/api/meal/meal.redaxios.ts";
+import {createMeal, deleteMeal, getAllMealsInaDay, removeFoodFromMeal} from "@/api/meal/meal.redaxios.ts";
 import {DayDTO} from "@/model/DayDTO.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {
-    Dialog, DialogClose,
+    Dialog,
+    DialogClose,
     DialogContent,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger
@@ -40,6 +42,7 @@ const DietDailyPlanCard = ({
         const [mealList, setMealList] = useState<MealDTO[]>([]);
         const [foodSuggestions, setFoodSuggestions] = useState<FoodDTO[]>([]);
         const [selectedFood, setSelectedFood] = useState<FoodDTO[]>([]);
+        const [selectedMeal, setSelectedMeal] = useState<MealDTO | null>(null);
 
 
         useEffect(() => {
@@ -59,6 +62,14 @@ const DietDailyPlanCard = ({
             }
             console.log(mealList);
         }, [day]);
+
+        useEffect(() => {
+            console.log(selectedMeal);
+        }, [selectedMeal])
+
+        useEffect(() => {
+            console.log(selectedFood);
+        }, [selectedFood])
 
         type FormValues = {
             mealName: string;
@@ -86,10 +97,17 @@ const DietDailyPlanCard = ({
             }
         }
 
+        const handleEditMeal = (meal: MealDTO) => {
+            setSelectedMeal(meal);
+            if (meal.foodList.length > 0) {
+                setSelectedFood(meal.foodList);
+            }
+        };
+
         const handleSuggestion = (suggestion: FoodDTO) => {
             setSelectedFood([...selectedFood, suggestion]);
             setFoodSuggestions([]);
-        }
+        };
 
         const handleRemoveFood = (index: number) => {
             const updatedList = [...selectedFood];
@@ -102,6 +120,50 @@ const DietDailyPlanCard = ({
                 successMessage(r);
                 setRefreshTrigger(!refreshTrigger);
             }, error => {
+                errorMessage(error.data);
+            });
+        }
+
+        const handleRemoveFoodFromMeal = (food: FoodDTO) => {
+            setSelectedMeal((prevSelectedMeal: MealDTO | null) => {
+                if (!prevSelectedMeal) {
+                    return prevSelectedMeal;
+                }
+
+                const updatedFoods: FoodDTO[] = [];
+
+                updatedFoods.push(food);
+
+                const updatedMeal: MealDTO = {
+                    ...prevSelectedMeal,
+                    foodList: updatedFoods,
+                };
+
+                return updatedMeal;
+            });
+
+            removeFoodFromMeal(selectedMeal!).then(r => {
+                if (!selectedMeal) {
+                    errorMessage('No meal selected');
+                    return;
+                }
+                successMessage(r);
+                setRefreshTrigger(!refreshTrigger);
+            }).catch(error => {
+                errorMessage(error.data);
+            });
+        }
+
+        const updateMeal = (mealToUpdate: MealDTO) => {
+            console.log(mealToUpdate);
+            if (mealToUpdate.foodList.length === 0) {
+                mealToUpdate.foodList = selectedFood;
+            }
+
+            createMeal(mealToUpdate).then(r => {
+                successMessage(r);
+                setRefreshTrigger(!refreshTrigger);
+            }).catch(error => {
                 errorMessage(error.data);
             });
         }
@@ -146,7 +208,8 @@ const DietDailyPlanCard = ({
                                             <div className="flex items-center ml-5">
                                                 <DialogTrigger asChild>
                                                     <Button className="bg-transparent hover:bg-transparent">
-                                                        <Pen className="text-blue-500 cursor-pointer"/>
+                                                        <Pen className="text-blue-500 cursor-pointer"
+                                                             onClick={() => handleEditMeal(meal)}/>
                                                     </Button>
                                                 </DialogTrigger>
                                             </div>
@@ -155,18 +218,80 @@ const DietDailyPlanCard = ({
                                                          onClick={() => handleRemoveMeal(meal)}/>
                                             </div>
                                             <DialogContent>
-                                                <DialogHeader>
-                                                    <div>
-                                                        test
-                                                    </div>
-                                                    <div>
-
-                                                    </div>
+                                                <DialogHeader className="flex justify-center items-center">
+                                                    <DialogTitle>
+                                                        Meal details
+                                                    </DialogTitle>
+                                                    <DialogDescription>
+                                                        Add or remove food for the existing meal.
+                                                    </DialogDescription>
                                                 </DialogHeader>
+                                                <div className="flex justify-center items-center my-6">
+                                                    <Label>Meal name:</Label>
+                                                    <Input type="text" placeholder="foodName" defaultValue={meal.mealName}
+                                                           className="w-1/2 ml-3" disabled/>
+                                                </div>
+                                                <hr className="border-t border-gray-300"/>
+                                                <div>
+                                                    <div className="flex justify-center items-center my-6">
+                                                        Foods:
+                                                    </div>
+                                                    <div className="flex justify-center items-center my-6">
+                                                        <div className="block w-1/2 ml-3">
+                                                            <Input type="text" placeholder="Search a food to add..."
+                                                                   className="w-full"
+                                                                   onChange={e => handleAutocomplete(e.target.value)}/>
+                                                            <div className="absolute w-1/2">
+                                                                {foodSuggestions && foodSuggestions.map((suggestion, i) =>
+                                                                    <div key={i}
+                                                                         className="justify-center block cursor-pointer border-r bg-white border-b border-l hover:bg-blue-500 hover:text-white"
+                                                                         onClick={() => handleSuggestion(suggestion)}
+                                                                    >
+                                                                        {suggestion.foodName}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="my-16">
+                                                        {selectedFood.map((food, index) => (
+                                                            <div className="flex justify-between items-center my-3"
+                                                                 key={index}>
+                                                                <div className="ml-3">
+                                                                    {food.foodName}
+                                                                </div>
+                                                                <div>
+                                                                    {food.foodGroup}
+                                                                </div>
+                                                                <div className="mr-3">
+                                                                    <DialogClose asChild>
+                                                                        <XCircle className="text-red-500 cursor-pointer"
+                                                                                 onClick={() => handleRemoveFoodFromMeal(food)}/>
+                                                                    </DialogClose>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <hr className="border-t border-gray-300"/>
+                                                <DialogClose asChild>
+                                                    <div className="flex justify-center items-center mt-4">
+                                                        <Button
+                                                            onClick={() => updateMeal(selectedMeal!)}
+                                                            className="bg-blue-600 hover:bg-blue-400 text-white hover:text-white">
+                                                            Update meal
+                                                        </Button>
+                                                    </div>
+                                                </DialogClose>
                                             </DialogContent>
                                         </Dialog>
                                     </div>
                                 ))}
+                                <div>
+                                    <Button className="bg-blue-600 hover:bg-blue-400 text-white hover:text-white">
+                                        New meal
+                                    </Button>
+                                </div>
                             </div>
                         )}
                         {mealList.length === 0 && (

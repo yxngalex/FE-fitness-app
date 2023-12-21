@@ -35,18 +35,11 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
                     setDaysLoaded(r);
 
                     const today = new Date();
+                    const closestDay = getClosestDay(today, r);
 
-                    getDayByDate(today)
-                        .then((todayDay) => {
-                            setCurrentDay(todayDay);
-                        })
-                        .catch(() => {
-                            getClosestDay(today).then((closestDay) => {
-                                setCurrentDay(closestDay);
-                            }).catch((error) => {
-                                errorMessage(error.message || "An error occurred");
-                            });
-                        });
+                    setCurrentDay(closestDay);
+
+
                 }
             })
             .catch((error) => {
@@ -54,43 +47,67 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
             });
     };
 
-    const handlePreviousDay = async () => {
-        if (currentDay) {
-            const currentDayDate = new Date(currentDay.loggedDate);
-            const previousDayDate = new Date(currentDayDate);
-            previousDayDate.setDate(previousDayDate.getDate() - 1);
+    const getClosestDay = (targetDate: Date, days: DayDTO[]) => {
+        const formattedTargetDate = targetDate.toISOString().split('T')[0]; // Format to 'YYYY-MM-DD'
 
-            try {
-                const response = await getDayByDate(previousDayDate);
+        const currentDateLogged = days.some(day => {
+            const dayDate = new Date(day.loggedDate);
+            return dayDate.toISOString().split('T')[0] === formattedTargetDate;
+        });
 
-                if (response !== null) {
-                    setCurrentDay(response);
-                } else {
-                    errorMessage("No more previous days in history.");
-                }
-            } catch (error) {
-                errorMessage("No more previous days in history.");
+        if (currentDateLogged) {
+            const closestDay = days.find(day => {
+                const dayDate = new Date(day.loggedDate);
+                return dayDate.toISOString().split('T')[0] === formattedTargetDate;
+            });
+
+            return closestDay || null;
+        }
+
+        const closestDayBefore = days.reduce((closest: DayDTO | null, day) => {
+            const dayDate = new Date(day.loggedDate);
+
+            if (dayDate < targetDate && (!closest || dayDate > new Date(closest.loggedDate))) {
+                return day;
+            }
+
+            return closest;
+        }, null);
+
+        return closestDayBefore || null;
+    };
+
+    const handleNextDay = () => {
+        if (currentDay && daysLoaded.length > 0) {
+            const currentIndex = daysLoaded.findIndex(day => {
+                const dayDate = new Date(day.loggedDate);
+                const currentDayDate = new Date(currentDay.loggedDate);
+                return dayDate.toISOString().split('T')[0] === currentDayDate.toISOString().split('T')[0];
+            });
+
+            if (currentIndex > 0) {
+                const previousDay = daysLoaded[currentIndex - 1];
+                setCurrentDay(previousDay);
+            } else {
+                errorMessage("Visit exercises page to create more days.");
             }
         }
     };
 
 
-    const handleNextDay = async () => {
-        if (currentDay) {
-            const currentDayDate = new Date(currentDay.loggedDate);
-            const nextDayDate = new Date(currentDayDate);
-            nextDayDate.setDate(nextDayDate.getDate() + 1);
+    const handlePreviousDay = () => {
+        if (currentDay && daysLoaded.length > 0) {
+            const currentIndex = daysLoaded.findIndex(day => {
+                const dayDate = new Date(day.loggedDate);
+                const currentDayDate = new Date(currentDay.loggedDate);
+                return dayDate.toISOString().split('T')[0] === currentDayDate.toISOString().split('T')[0];
+            });
 
-            try {
-                const response = await getDayByDate(nextDayDate);
-
-                if (response !== null) {
-                    setCurrentDay(response);
-                } else {
-                    errorMessage("Visit exercises page to create more days.");
-                }
-            } catch (error) {
-                errorMessage("Visit exercises page to create more days.");
+            if (currentIndex < daysLoaded.length - 1) {
+                const nextDay = daysLoaded[currentIndex + 1];
+                setCurrentDay(nextDay);
+            } else {
+                errorMessage("No more previous days in history.");
             }
         }
     };
