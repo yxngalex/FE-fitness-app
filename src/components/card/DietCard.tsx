@@ -133,10 +133,17 @@ const DietDailyPlanCard = ({
         }
 
         const updateMeal = (mealToUpdate: MealDTO) => {
-            console.log(mealToUpdate);
-            if (mealToUpdate.foodList.length === 0) {
-                mealToUpdate.foodList = selectedFood;
-            }
+            mealToUpdate.foodList = mealToUpdate.foodList || [];
+
+            const newFoods: FoodDTO[] = [];
+
+            selectedFood.forEach(newFood => {
+                if (!mealToUpdate.foodList.some(existingFood => existingFood.foodName === newFood.foodName)) {
+                    newFoods.push(newFood);
+                }
+            });
+
+            mealToUpdate.foodList = newFoods;
 
             createMeal(mealToUpdate).then(r => {
                 successMessage(r);
