@@ -65,9 +65,9 @@ const MealDialog = ({day, errorMessage, successMessage, refreshTrigger, setRefre
         };
 
         createMeal(mealWrapper).then(r => {
+            setSelectedFood([]);
             successMessage(r);
             setRefreshTrigger(!refreshTrigger);
-            console.log('Refresh triggered:', refreshTrigger);
         }).catch(error => {
             errorMessage(error.data);
         });

@@ -3,11 +3,11 @@ import {getAllDays} from "@/api/day/day.redaxios.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {Link} from "react-router-dom";
 import {DayDTO} from "@/model/DayDTO.ts";
-import {ArrowLeft, ArrowRight} from "lucide-react";
 import BMRCalculatorCard from "@/components/card/BMRCalculatorCard.tsx";
 import DailyNutritionCard from "@/components/card/DailyNutritionCard.tsx";
 import DietDailyPlanCard from "@/components/card/DietCard.tsx";
 import {Fade} from "react-awesome-reveal";
+import Header from "@/components/header/Header.tsx";
 
 interface FoodProps {
     errorMessage: (error: string | null) => void;
@@ -78,44 +78,8 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
         return closestDayBefore || null;
     };
 
-    const handleNextDay = () => {
-        if (currentDay && daysLoaded.length > 0) {
-            const currentIndex = daysLoaded.findIndex(day => {
-                const dayDate = new Date(day.loggedDate);
-                const currentDayDate = new Date(currentDay.loggedDate);
-                return dayDate.toISOString().split('T')[0] === currentDayDate.toISOString().split('T')[0];
-            });
-
-            if (currentIndex > 0) {
-                const previousDay = daysLoaded[currentIndex - 1];
-                setCurrentDay(previousDay);
-            } else {
-                errorMessage("Visit exercises page to create more days.");
-            }
-        }
-    };
-
-
-    const handlePreviousDay = () => {
-        if (currentDay && daysLoaded.length > 0) {
-            const currentIndex = daysLoaded.findIndex(day => {
-                const dayDate = new Date(day.loggedDate);
-                const currentDayDate = new Date(currentDay.loggedDate);
-                return dayDate.toISOString().split('T')[0] === currentDayDate.toISOString().split('T')[0];
-            });
-
-            if (currentIndex < daysLoaded.length - 1) {
-                const nextDay = daysLoaded[currentIndex + 1];
-                setCurrentDay(nextDay);
-            } else {
-                errorMessage("No more previous days in history.");
-            }
-        }
-    };
-
     return (
         <>
-
             {showDialog && (
                 <div className="flex justify-center items-center h-full">
                     <div className="px-4 pb-2 pt-6 bg-white">
@@ -144,51 +108,8 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
             )}
             {contentLoaded && (
                 <div>
-                    <div className="p-8 block">
-                        <div className="flex justify-between items-center">
-                            <span className="text-4xl pb-3 font-bold">
-                                {currentDay && (
-                                    <>
-                                        {new Date(currentDay.loggedDate).toDateString() === new Date().toDateString()
-                                            ? (
-                                                <>
-                                                    <div className="">Today</div>
-                                                    <div
-                                                        className="text-lg">{new Date(currentDay.loggedDate).toLocaleDateString('en-US', {
-                                                        day: 'numeric',
-                                                        month: 'short',
-                                                    })}</div>
-                                                </>
-                                            )
-                                            : (
-                                                <div>
-                                                    {new Date(currentDay.loggedDate).toLocaleDateString('en-US', {
-                                                        day: 'numeric',
-                                                        month: 'short',
-                                                    })}
-                                                </div>
-                                            )
-                                        }
-                                    </>
-                                )}
-                            </span>
-                            <div className="flex gap-4">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={handlePreviousDay}
-                                >
-                                    <ArrowLeft/>
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={handleNextDay}>
-                                    <ArrowRight/>
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
+                    <Header errorMessage={errorMessage} currentDay={currentDay}
+                            setCurrentDay={setCurrentDay} daysLoaded={daysLoaded}/>
                     <Fade direction="down">
                         <div className="flex justify-center items-center w-full my-16 mx-5">
                             {currentDay &&

@@ -161,11 +161,11 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                         <div className="pb-2 pt-4 flex-1">
                             <FormField
                                 control={form.control}
-                                name="password"
+                                name="email"
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input type="password" placeholder="Password" {...field}
+                                            <Input type="email" placeholder="Email" {...field}
                                                    className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
@@ -177,26 +177,26 @@ const Register = ({onToggleView, onRegisterError, onRegisterSuccess}: RegisterPr
                         <div className="pb-2 pt-4 mr-2 flex-1">
                             <FormField
                                 control={form.control}
-                                name="confPassword"
+                                name="password"
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input type="password"
-                                                   placeholder="Confirm Password" {...field}
+                                            <Input type="password" placeholder="Password" {...field}
                                                    className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
                                 )}></FormField>
                         </div>
-                        <div className="pb-2 pt-4 flex-1">
+                        <div className="pb-2 pt-4 mr-2 flex-1">
                             <FormField
                                 control={form.control}
-                                name="email"
+                                name="confPassword"
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input type="email" placeholder="Email" {...field}
+                                            <Input type="password"
+                                                   placeholder="Confirm Password" {...field}
                                                    className="block w-full h-full p-4 text-lg rounded-sm border-slate-300 hover:border-black placeholder:text-black text-black hover:bg-gray-100"/>
                                         </FormControl>
                                         <FormMessage/>

@@ -6,7 +6,6 @@ import {AuthContext} from "@/providers/AuthProvider.tsx";
 import ErrorAlert from "@/components/alert/ErrorAlert.tsx";
 import SuccessAlert from "@/components/alert/SuccessAlert.tsx";
 import Layout from "@/components/layout/Layout.tsx";
-import Profile from "@/pages/profile/Profile.tsx";
 import Dashboard from "@/pages/dashboard/Dashboard.tsx";
 import Exercise from "@/pages/exercise/Exercise.tsx";
 import Food from "@/pages/food/Food.tsx";
@@ -38,9 +37,6 @@ function App() {
                            <Navigate to="/login"/>}/>
                 <Route path="/food"
                        element={auth?.isAuthenticated ? <Layout><Food errorMessage={setErrorMessage} successMessage={setSuccessMessage}/></Layout> :
-                           <Navigate to="/login"/>}/>
-                <Route path="/profile"
-                       element={auth?.isAuthenticated ? <Layout><Profile/></Layout> :
                            <Navigate to="/login"/>}/>
             </Routes>
         </>

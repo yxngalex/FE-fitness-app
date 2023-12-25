@@ -103,6 +103,9 @@ const DietDailyPlanCard = ({
         }
 
         const handleRemoveFoodFromMeal = (food: FoodDTO) => {
+            // bug when removing
+            console.log(food);
+
             setSelectedMeal((prevSelectedMeal: MealDTO | null) => {
                 if (!prevSelectedMeal) {
                     return prevSelectedMeal;

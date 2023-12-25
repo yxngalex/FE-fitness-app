@@ -10,6 +10,8 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog.tsx";
 import Routine from "@/components/routine/Routine.tsx";
+import Header from "@/components/header/Header.tsx";
+import {DayDTO} from "@/model/DayDTO.ts";
 
 interface ExercisesProps {
     errorMessage: (error: string | null) => void;
@@ -19,6 +21,8 @@ interface ExercisesProps {
 const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
     const [showDialog, setShowDialog] = useState(false);
     const [contentLoaded, setContentLoaded] = useState(false);
+    const [currentDay, setCurrentDay] = useState<DayDTO | null>(null);
+    const [daysLoaded, setDaysLoaded] = useState<DayDTO[]>([]);
 
     useEffect(() => {
         loadData();
@@ -30,14 +34,54 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
                 if (Array.isArray(r) && r.length === 0) {
                     setShowDialog(true);
                 } else {
-                    console.log(r)
+                    console.log(r);
                     setContentLoaded(true);
+                    setDaysLoaded(r);
+
+                    const today = new Date();
+                    const closestDay = getClosestDay(today, r);
+
+                    setCurrentDay(closestDay);
+
+
                 }
             })
             .catch((error) => {
                 errorMessage(error.message || "An error occurred");
             });
+    }
+
+
+    const getClosestDay = (targetDate: Date, days: DayDTO[]) => {
+        const formattedTargetDate = targetDate.toISOString().split('T')[0]; // Format to 'YYYY-MM-DD'
+
+        const currentDateLogged = days.some(day => {
+            const dayDate = new Date(day.loggedDate);
+            return dayDate.toISOString().split('T')[0] === formattedTargetDate;
+        });
+
+        if (currentDateLogged) {
+            const closestDay = days.find(day => {
+                const dayDate = new Date(day.loggedDate);
+                return dayDate.toISOString().split('T')[0] === formattedTargetDate;
+            });
+
+            return closestDay || null;
+        }
+
+        const closestDayBefore = days.reduce((closest: DayDTO | null, day) => {
+            const dayDate = new Date(day.loggedDate);
+
+            if (dayDate < targetDate && (!closest || dayDate > new Date(closest.loggedDate))) {
+                return day;
+            }
+
+            return closest;
+        }, null);
+
+        return closestDayBefore || null;
     };
+
 
     const handleAutoCreation = () => {
         autoCreateDays().then(r => {
@@ -106,7 +150,8 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
             )}
             {contentLoaded && (
                 <div>
-                    <p>Other content loaded.</p>
+                    <Header errorMessage={errorMessage} currentDay={currentDay} setCurrentDay={setCurrentDay}
+                            daysLoaded={daysLoaded}/>
                 </div>
             )}
         </>
