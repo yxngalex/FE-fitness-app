@@ -20,14 +20,14 @@ export const getAutocompleteExercise = async (value: string) => {
     }
 };
 
-export const getAllExercise = async () => {
+export const getAllExerciseByCategoryName = async (categoryName: string | undefined) => {
     try {
         const token = localStorage.getItem('token');
 
         if (!token) {
             throw new Error('No authentication token found')
         }
-        const response = await redaxios.get(`${BASE_URL}/getAll`, {
+        const response = await redaxios.get(`${BASE_URL}/getAllByCategoryName?categoryName=${categoryName}`, {
             headers: {
                 Authorization: `${token}`
             }

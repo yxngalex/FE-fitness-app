@@ -23,10 +23,11 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
     const [contentLoaded, setContentLoaded] = useState(false);
     const [currentDay, setCurrentDay] = useState<DayDTO | null>(null);
     const [daysLoaded, setDaysLoaded] = useState<DayDTO[]>([]);
+    const [refreshTrigger, setRefreshTrigger] = useState<boolean>(false);
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [refreshTrigger]);
 
     const loadData = () => {
         getAllDays()
@@ -126,7 +127,8 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
                                             To create a day with a workout routine you need to fill out the form.
                                         </DialogDescription>
                                     </DialogHeader>
-                                    <Routine successMessage={successMessage} errorMessage={errorMessage}/>
+                                    <Routine successMessage={successMessage} errorMessage={errorMessage}
+                                             refreshTrigger={refreshTrigger} setRefreshTrigger={setRefreshTrigger}/>
                                 </DialogContent>
                             </Dialog>
                             <Button

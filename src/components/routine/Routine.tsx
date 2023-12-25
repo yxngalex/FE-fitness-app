@@ -6,7 +6,7 @@ import * as z from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {ChangeEvent, useEffect, useState} from "react";
 import {ExerciseDTO} from "@/model/ExerciseDTO.ts";
-import {getAllExercise} from "@/api/exercise/exercise.redaxios.ts";
+import {getAllExerciseByCategoryName} from "@/api/exercise/exercise.redaxios.ts";
 // import {ExerciseStatsDTO} from "@/model/ExerciseStatsDTO.ts";
 import {CategoryDTO} from "@/model/CategoryDTO.ts";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
@@ -26,23 +26,30 @@ import {ExerciseStatsDTO} from "@/model/ExerciseStatsDTO.ts";
 interface RoutineProps {
     errorMessage: (error: string | null) => void;
     successMessage: (error: string | null) => void;
+    refreshTrigger: boolean;
+    setRefreshTrigger: (value: boolean) => void;
 }
 
-const Routine = ({errorMessage, successMessage}: RoutineProps) => {
+const Routine = ({errorMessage, successMessage, refreshTrigger, setRefreshTrigger}: RoutineProps) => {
     const [selectedCategory, setSelectedCategory] = useState<CategoryDTO | undefined>(undefined);
     const [fetchedCategoryList, setFetchedCategoryList] = useState<CategoryDTO[]>([]);
     const [fetchedExerciseList, setFetchedExerciseList] = useState<ExerciseDTO[]>([]);
     const [selectedExercisesList, setSelectedExercisesList] = useState<Array<ExerciseDTO | undefined>>([]);
     const [selectedExercise, setSelectedExercise] = useState<ExerciseDTO | undefined>(undefined);
     const [date, setDate] = useState<Date>();
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
     useEffect(() => {
-        getAllExercise().then(r => {
-            setFetchedExerciseList(r);
-        }).catch(error => {
-            errorMessage(error.data);
-        })
-    }, [errorMessage]);
+        if (selectedCategory) {
+            getAllExerciseByCategoryName(selectedCategory.categoryName)
+                .then((r) => {
+                    setFetchedExerciseList(r);
+                })
+                .catch((error) => {
+                    errorMessage(error.data);
+                });
+        }
+    }, [selectedCategory, errorMessage]);
 
     useEffect(() => {
         getAllCategories().then(r => {
@@ -161,6 +168,7 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
 
         createDay(dayDTO).then(r => {
             successMessage(r);
+            setRefreshTrigger(!refreshTrigger);
         }).catch(error => {
             errorMessage(error.data);
         })
@@ -170,6 +178,25 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
         <div className="">
             <Form {...form}>
                 <form onSubmit={handleSubmit(onSubmit)}>
+                    <FormItem className="my-6">
+                        <label htmlFor="category">Category</label>
+                        <select
+                            id="category"
+                            name="category"
+                            className="w-full cursor-pointer h-10 px-3 mt-1 mb-2 text-base placeholder-gray-600 border rounded-md appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300"
+                            value={selectedCategory?.categoryName || ''}
+                            onChange={handleCategoryChange}
+                        >
+                            <option value="" disabled>
+                                Select a category
+                            </option>
+                            {fetchedCategoryList.map((category, index) => (
+                                <option key={index} value={category.categoryName}>
+                                    {category.categoryName}
+                                </option>
+                            ))}
+                        </select>
+                    </FormItem>
                     <FormItem className="my-6">
                         <label htmlFor="exercise">Select an Exercise</label>
                         <select
@@ -227,7 +254,7 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
                         </div>
                     ))}
                     <div className="my-6">
-                        <Popover>
+                        <Popover open={isPopoverOpen} onOpenChange={(isOpen) => setIsPopoverOpen(isOpen)}>
                             <PopoverTrigger asChild>
                                 <div>
                                     <Label>Start Date</Label>
@@ -237,6 +264,10 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
                                             'justify-start text-left font-normal w-full',
                                             !date && 'text-muted-foreground'
                                         )}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setIsPopoverOpen(!isPopoverOpen)
+                                        }}
                                     >
                                         <CalendarIcon className="mr-2 h-4 w-4"/>
                                         {date ? format(date, 'PPP') : <span>Pick a date</span>}
@@ -248,28 +279,7 @@ const Routine = ({errorMessage, successMessage}: RoutineProps) => {
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <FormItem className="my-6">
-                        <label htmlFor="category">Category</label>
-                        <select
-                            id="category"
-                            name="category"
-                            className="w-full cursor-pointer h-10 px-3 mt-1 mb-2 text-base placeholder-gray-600 border rounded-md appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300"
-                            value={selectedCategory?.categoryName || ''}
-                            onChange={handleCategoryChange}
-                        >
-                            <option value="" disabled>
-                                Select a category
-                            </option>
-                            {fetchedCategoryList.map((category, index) => (
-                                <option key={index} value={category.categoryName}>
-                                    {category.categoryName}
-                                </option>
-                            ))}
-                        </select>
-                    </FormItem>
-
                     <FormMessage/>
-
                     <DialogClose asChild>
                         <Button
                             type="submit"
