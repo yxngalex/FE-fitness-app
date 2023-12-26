@@ -12,6 +12,7 @@ import {
 import Routine from "@/components/routine/Routine.tsx";
 import Header from "@/components/header/Header.tsx";
 import {DayDTO} from "@/model/DayDTO.ts";
+import WorkoutRoutineCard from "@/components/card/WorkoutRoutineCard.tsx";
 
 interface ExercisesProps {
     errorMessage: (error: string | null) => void;
@@ -163,6 +164,8 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
                 <div>
                     <Header errorMessage={errorMessage} currentDay={currentDay} setCurrentDay={setCurrentDay}
                             daysLoaded={daysLoaded}/>
+                    <WorkoutRoutineCard errorMessage={errorMessage} successMessage={successMessage}
+                                        currentDay={currentDay} />
                 </div>
             )}
         </>
