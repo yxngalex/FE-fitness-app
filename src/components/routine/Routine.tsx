@@ -26,11 +26,12 @@ import {ExerciseStatsDTO} from "@/model/ExerciseStatsDTO.ts";
 interface RoutineProps {
     errorMessage: (error: string | null) => void;
     successMessage: (error: string | null) => void;
-    refreshTrigger: boolean;
-    setRefreshTrigger: (value: boolean) => void;
+    setContentLoaded: (contentLoaded: boolean) => void;
+    setShowDialog: (showDialog: boolean) => void;
+    loadData: () => void;
 }
 
-const Routine = ({errorMessage, successMessage, refreshTrigger, setRefreshTrigger}: RoutineProps) => {
+const Routine = ({errorMessage, successMessage, loadData, setContentLoaded, setShowDialog}: RoutineProps) => {
     const [selectedCategory, setSelectedCategory] = useState<CategoryDTO | undefined>(undefined);
     const [fetchedCategoryList, setFetchedCategoryList] = useState<CategoryDTO[]>([]);
     const [fetchedExerciseList, setFetchedExerciseList] = useState<ExerciseDTO[]>([]);
@@ -157,21 +158,30 @@ const Routine = ({errorMessage, successMessage, refreshTrigger, setRefreshTrigge
             goalDTO: null
         }
 
+        const formattedDate = date !== undefined ? new Date(format(date, 'yyyy-MM-dd')) : new Date();
+
         const dayDTO: DayDTO = {
             nutritionDTO: null,
             workoutRoutineDTO: workoutRoutineDTO,
             bmr: null,
-            loggedDate: date !== undefined ? date : new Date(),
+            loggedDate: formattedDate,
         }
 
         console.log(dayDTO);
 
         createDay(dayDTO).then(r => {
             successMessage(r);
-            setRefreshTrigger(!refreshTrigger);
+            setContentLoaded(true);
+            setShowDialog(false);
         }).catch(error => {
             errorMessage(error.data);
-        })
+        }).finally(() => {
+            loadData();
+            setSelectedCategory(undefined);
+            setSelectedExercise(undefined);
+            setSelectedExercisesList([]);
+            setDate(undefined);
+        });
     };
 
     return (

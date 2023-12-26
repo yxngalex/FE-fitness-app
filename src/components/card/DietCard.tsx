@@ -59,19 +59,15 @@ const DietDailyPlanCard = ({
                     }
                 });
             }
-            console.log(mealList);
         }, [day]);
 
         useEffect(() => {
-            console.log(selectedMeal);
         }, [selectedMeal])
 
         useEffect(() => {
-            console.log(selectedFood);
         }, [selectedFood])
 
         const handleAutocomplete = (input: string) => {
-            console.log(input);
             if (input) {
                 getAutocompleteFood(input).then(r => {
                     setFoodSuggestions(r);
@@ -103,37 +99,22 @@ const DietDailyPlanCard = ({
         }
 
         const handleRemoveFoodFromMeal = (food: FoodDTO) => {
-            // bug when removing
-            console.log(food);
 
-            setSelectedMeal((prevSelectedMeal: MealDTO | null) => {
-                if (!prevSelectedMeal) {
-                    return prevSelectedMeal;
-                }
+            if (!selectedMeal) {
+                errorMessage('No meal selected');
+                return;
+            }
 
-                const updatedFoods: FoodDTO[] = [];
+            selectedMeal.foodList = [food];
 
-                updatedFoods.push(food);
+            removeFoodFromMeal(selectedMeal!).then((response) => {
+                successMessage(response);
 
-                const updatedMeal: MealDTO = {
-                    ...prevSelectedMeal,
-                    foodList: updatedFoods,
-                };
-
-                return updatedMeal;
-            });
-
-            removeFoodFromMeal(selectedMeal!).then(r => {
-                if (!selectedMeal) {
-                    errorMessage('No meal selected');
-                    return;
-                }
-                successMessage(r);
                 setRefreshTrigger(!refreshTrigger);
-            }).catch(error => {
+            }).catch((error) => {
                 errorMessage(error.data);
             });
-        }
+        };
 
         const updateMeal = (mealToUpdate: MealDTO) => {
             mealToUpdate.foodList = mealToUpdate.foodList || [];

@@ -39,8 +39,6 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
                     const closestDay = getClosestDay(today, r);
 
                     setCurrentDay(closestDay);
-
-
                 }
             })
             .catch((error) => {

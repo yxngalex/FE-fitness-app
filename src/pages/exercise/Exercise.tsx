@@ -23,11 +23,10 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
     const [contentLoaded, setContentLoaded] = useState(false);
     const [currentDay, setCurrentDay] = useState<DayDTO | null>(null);
     const [daysLoaded, setDaysLoaded] = useState<DayDTO[]>([]);
-    const [refreshTrigger, setRefreshTrigger] = useState<boolean>(false);
 
     useEffect(() => {
         loadData();
-    }, [refreshTrigger]);
+    }, []);
 
     const loadData = () => {
         getAllDays()
@@ -43,8 +42,6 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
                     const closestDay = getClosestDay(today, r);
 
                     setCurrentDay(closestDay);
-
-
                 }
             })
             .catch((error) => {
@@ -73,25 +70,36 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
         const closestDayBefore = days.reduce((closest: DayDTO | null, day) => {
             const dayDate = new Date(day.loggedDate);
 
-            if (dayDate < targetDate && (!closest || dayDate > new Date(closest.loggedDate))) {
+            if (dayDate <= targetDate && (!closest || dayDate > new Date(closest.loggedDate))) {
                 return day;
             }
 
             return closest;
         }, null);
 
-        return closestDayBefore || null;
+        const closestDayAfter = days.reduce((closest: DayDTO | null, day) => {
+            const dayDate = new Date(day.loggedDate);
+
+            if (dayDate > targetDate && (!closest || dayDate < new Date(closest.loggedDate))) {
+                return day;
+            }
+
+            return closest;
+        }, null);
+
+        return closestDayBefore || closestDayAfter || null;
     };
 
 
     const handleAutoCreation = () => {
         autoCreateDays().then(r => {
+            successMessage(r);
             setShowDialog(false);
             setContentLoaded(true);
-            loadData()
-            successMessage(r);
         }).catch(error => {
             errorMessage(error.data);
+        }).finally(() => {
+            loadData();
         })
     }
 
@@ -128,7 +136,8 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
                                         </DialogDescription>
                                     </DialogHeader>
                                     <Routine successMessage={successMessage} errorMessage={errorMessage}
-                                             refreshTrigger={refreshTrigger} setRefreshTrigger={setRefreshTrigger}/>
+                                             setShowDialog={setShowDialog}
+                                             loadData={loadData} setContentLoaded={setContentLoaded}/>
                                 </DialogContent>
                             </Dialog>
                             <Button
