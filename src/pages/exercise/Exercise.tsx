@@ -130,7 +130,7 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
                                     </Button>
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-[425px] lg:max-w-[750px]">
-                                    <DialogHeader className="">
+                                    <DialogHeader>
                                         <DialogTitle>Create a Workout Routine.</DialogTitle>
                                         <DialogDescription>
                                             To create a day with a workout routine you need to fill out the form.

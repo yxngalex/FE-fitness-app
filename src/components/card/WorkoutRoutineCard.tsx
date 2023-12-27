@@ -5,7 +5,14 @@ import ImageDecoder from "@/util/ImageDecoder.tsx";
 import {CheckCheck, Eye, PlusCircle, XCircle} from "lucide-react";
 import {updateWorkoutRoutine} from "@/api/workoutRoutine/workoutRoutine.redaxios.ts";
 import {deleteDay} from "@/api/day/day.redaxios.ts";
-import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog.tsx";
 import Routine from "@/components/routine/Routine.tsx";
 
 interface WorkoutRoutineCardProps {
@@ -95,17 +102,43 @@ const WorkoutRoutineCard = ({
                                     <div className="mr-1"> Reps: {exercise?.reps} </div>
                                     <div className="mr-1"> Weight: {exercise?.exerciseWeight} </div>
                                     {/*add dialog with view details here*/}
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="group relative text-blue-600 hover:text-blue-400 bg-transparent hover:bg-transparent border-0  mr-5"
-                                    >
-                                        <Eye/>
-                                        <span
-                                            className="absolute top-1/2 ms-4 translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
-                                            Exercise Details
-                                        </span>
-                                    </Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="group relative text-blue-600 hover:text-blue-400 bg-transparent hover:bg-transparent border-0  mr-5"
+                                            >
+                                                <Eye/>
+                                                <span
+                                                    className="absolute top-1/2 ms-4 translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+                                                    Exercise Details
+                                                </span>
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader className="flex items-center justify-center">
+                                                <DialogTitle>Exercise Details</DialogTitle>
+                                                <DialogDescription>{exercise.exerciseDTO.exerciseName}</DialogDescription>
+                                            </DialogHeader>
+                                            <div className="flex flex-col space-y-1.5 text-lg p-1">
+                                                <div className="flex align-center gap-3">
+                                                    <div
+                                                        className="flex align-center gap-3 max-w-[550px] max-h-[550px]">
+                                                        <ImageDecoder base64String={exercise.exerciseDTO.image}/>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center justify-center gap-3">
+                                                    {exercise.exerciseDTO.exerciseDescription}
+                                                </div>
+                                                <div className="flex gap-6 items-center justify-center py-6">
+                                                    <div> Sets: {exercise?.set} </div>
+                                                    <div> Reps: {exercise?.reps} </div>
+                                                    <div> Weight: {exercise?.exerciseWeight} </div>
+                                                </div>
+                                            </div>
+                                        </DialogContent>
+                                    </Dialog>
                                 </div>
                             </div>
                         ))}
@@ -127,7 +160,6 @@ const WorkoutRoutineCard = ({
                                 </Button>
                             </div>
                         )}
-                        {/*Add dialog with routine here*/}
                         <div className="group relative mr-5">
                             <Dialog>
                                 <DialogTrigger asChild>
@@ -148,7 +180,6 @@ const WorkoutRoutineCard = ({
                                              setContentLoaded={setContentLoaded} setShowDialog={setShowDialog}
                                              loadData={loadData}/>
                                 </DialogContent>
-
                             </Dialog>
                         </div>
                         <div className="group relative mr-5">

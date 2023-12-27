@@ -31,7 +31,6 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
                 if (Array.isArray(r) && r.length === 0) {
                     setShowDialog(true);
                 } else {
-                    console.log(r);
                     setContentLoaded(true);
                     setDaysLoaded(r);
 
@@ -66,14 +65,24 @@ const Food = ({errorMessage, successMessage}: FoodProps) => {
         const closestDayBefore = days.reduce((closest: DayDTO | null, day) => {
             const dayDate = new Date(day.loggedDate);
 
-            if (dayDate < targetDate && (!closest || dayDate > new Date(closest.loggedDate))) {
+            if (dayDate <= targetDate && (!closest || dayDate > new Date(closest.loggedDate))) {
                 return day;
             }
 
             return closest;
         }, null);
 
-        return closestDayBefore || null;
+        const closestDayAfter = days.reduce((closest: DayDTO | null, day) => {
+            const dayDate = new Date(day.loggedDate);
+
+            if (dayDate > targetDate && (!closest || dayDate < new Date(closest.loggedDate))) {
+                return day;
+            }
+
+            return closest;
+        }, null);
+
+        return closestDayBefore || closestDayAfter || null;
     };
 
     return (
