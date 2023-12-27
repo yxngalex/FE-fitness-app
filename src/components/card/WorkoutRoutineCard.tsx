@@ -2,17 +2,29 @@ import {DayDTO} from "@/model/DayDTO.ts";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import ImageDecoder from "@/util/ImageDecoder.tsx";
-import {Eye} from "lucide-react";
+import {CheckCheck, Eye, PlusCircle, XCircle} from "lucide-react";
 import {updateWorkoutRoutine} from "@/api/workoutRoutine/workoutRoutine.redaxios.ts";
 import {deleteDay} from "@/api/day/day.redaxios.ts";
+import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog.tsx";
+import Routine from "@/components/routine/Routine.tsx";
 
 interface WorkoutRoutineCardProps {
     errorMessage: (error: string | null) => void;
     successMessage: (success: string | null) => void;
     currentDay: DayDTO | null;
+    setContentLoaded: (contentLoaded: boolean) => void;
+    setShowDialog: (showDialog: boolean) => void;
+    loadData: () => void;
 }
 
-const WorkoutRoutineCard = ({errorMessage, successMessage, currentDay}: WorkoutRoutineCardProps) => {
+const WorkoutRoutineCard = ({
+                                errorMessage,
+                                successMessage,
+                                currentDay,
+                                setContentLoaded,
+                                setShowDialog,
+                                loadData
+                            }: WorkoutRoutineCardProps) => {
 
     const formatDate = (date: Date | null | undefined) => {
         const options: Intl.DateTimeFormatOptions = {day: 'numeric', month: 'short', year: 'numeric'};
@@ -47,7 +59,7 @@ const WorkoutRoutineCard = ({errorMessage, successMessage, currentDay}: WorkoutR
     return (
         <>
             <div className="flex items-center justify-center">
-                <Card className="w-[800px] h-[700px] bg-slate-50 relative">
+                <Card className="w-[800px] h-[650px] bg-slate-50 relative">
                     <CardHeader>
                         <CardTitle className="justify-center items-center flex">Workout Plan</CardTitle>
                         <CardDescription className="justify-center items-center flex pt-2">Your workout plan
@@ -82,12 +94,17 @@ const WorkoutRoutineCard = ({errorMessage, successMessage, currentDay}: WorkoutR
                                     <div className="mr-1"> Sets: {exercise?.set} </div>
                                     <div className="mr-1"> Reps: {exercise?.reps} </div>
                                     <div className="mr-1"> Weight: {exercise?.exerciseWeight} </div>
+                                    {/*add dialog with view details here*/}
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="text-blue-600 hover:text-blue-400 bg-transparent hover:bg-transparent border-0  mr-5"
+                                        className="group relative text-blue-600 hover:text-blue-400 bg-transparent hover:bg-transparent border-0  mr-5"
                                     >
                                         <Eye/>
+                                        <span
+                                            className="absolute top-1/2 ms-4 translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+                                            Exercise Details
+                                        </span>
                                     </Button>
                                 </div>
                             </div>
@@ -95,23 +112,60 @@ const WorkoutRoutineCard = ({errorMessage, successMessage, currentDay}: WorkoutR
                     </CardContent>
                     <CardFooter className="absolute bottom-0 left-0 right-0 p-4 flex justify-center items-center">
                         {currentDay?.workoutRoutineDTO?.dateFinish ? null : (
+                            <div className="group relative mr-5">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="rounded-3xl border-slate-400 bg-transparent hover:bg-blue-400 text-white hover:text-white"
+                                    onClick={handleFinishWorkout}
+                                >
+                                    <CheckCheck className="text-blue-600 hover:text-white"/>
+                                    <span
+                                        className="absolute top-1/2 ms-4 translate-y-3/4 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+                                            Finish Workout
+                                    </span>
+                                </Button>
+                            </div>
+                        )}
+                        {/*Add dialog with routine here*/}
+                        <div className="group relative mr-5">
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="rounded-3xl border-slate-400 bg-transparent hover:bg-slate-400 text-white hover:text-white"
+                                    >
+                                        <PlusCircle className="text-slate-600 hover:text-white"/>
+                                        <span
+                                            className="absolute top-1/2 ms-4 translate-y-3/4 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+                                                Create Workout
+                                        </span>
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <Routine errorMessage={errorMessage} successMessage={successMessage}
+                                             setContentLoaded={setContentLoaded} setShowDialog={setShowDialog}
+                                             loadData={loadData}/>
+                                </DialogContent>
+
+                            </Dialog>
+                        </div>
+                        <div className="group relative mr-5">
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="bg-blue-600 hover:bg-blue-400 text-white hover:text-white mr-5"
-                                onClick={handleFinishWorkout}
+                                className="rounded-3xl border-slate-400 bg-transparent hover:bg-red-400 text-white hover:text-white"
+                                onClick={handleDeleteDay}
                             >
-                                Finish Workout
+                                <XCircle className="group relative text-red-600 hover:text-white"
+                                         onClick={handleDeleteDay}/>
+                                <span
+                                    className="absolute top-1/2 ms-4 translate-y-3/4 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+                                        Delete Workout
+                                </span>
                             </Button>
-                        )}
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="bg-red-600 hover:bg-red-400 text-white hover:text-white"
-                            onClick={handleDeleteDay}
-                        >
-                            Delete Workout Plan
-                        </Button>
+                        </div>
                     </CardFooter>
                 </Card>
             </div>

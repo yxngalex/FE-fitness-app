@@ -164,8 +164,11 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
                 <div>
                     <Header errorMessage={errorMessage} currentDay={currentDay} setCurrentDay={setCurrentDay}
                             daysLoaded={daysLoaded}/>
+                    <div className="w-full relative flex items-center justify-center mb-9">
+                    </div>
                     <WorkoutRoutineCard errorMessage={errorMessage} successMessage={successMessage}
-                                        currentDay={currentDay} />
+                                        currentDay={currentDay} loadData={loadData} setContentLoaded={setContentLoaded}
+                                        setShowDialog={setShowDialog}/>
                 </div>
             )}
         </>
