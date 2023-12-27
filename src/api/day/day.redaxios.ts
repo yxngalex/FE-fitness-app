@@ -82,3 +82,24 @@ export const createDay = async (day: DayDTO): Promise<string> => {
         throw e;
     }
 };
+
+
+export const deleteDay = async (day: DayDTO): Promise<string> => {
+    try {
+        const token = localStorage.getItem('token');
+
+        console.log(day);
+
+        const response = await redaxios.delete(`${BASE_URL}/delete/`, {
+            headers: {
+                Authorization: `${token}`
+            },
+            data: day
+        });
+
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching data:', e)
+        throw e;
+    }
+};

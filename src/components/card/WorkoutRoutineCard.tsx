@@ -2,6 +2,9 @@ import {DayDTO} from "@/model/DayDTO.ts";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import ImageDecoder from "@/util/ImageDecoder.tsx";
+import {Eye} from "lucide-react";
+import {updateWorkoutRoutine} from "@/api/workoutRoutine/workoutRoutine.redaxios.ts";
+import {deleteDay} from "@/api/day/day.redaxios.ts";
 
 interface WorkoutRoutineCardProps {
     errorMessage: (error: string | null) => void;
@@ -15,6 +18,31 @@ const WorkoutRoutineCard = ({errorMessage, successMessage, currentDay}: WorkoutR
         const options: Intl.DateTimeFormatOptions = {day: 'numeric', month: 'short', year: 'numeric'};
         return date ? new Date(date).toLocaleDateString(undefined, options) : '';
     };
+
+    const handleFinishWorkout = () => {
+        const workoutRoutineToUpdate = currentDay?.workoutRoutineDTO;
+
+        if (!workoutRoutineToUpdate) {
+            errorMessage("Workout routine not found");
+            return;
+        }
+
+        workoutRoutineToUpdate.dateFinish = new Date();
+
+        updateWorkoutRoutine(workoutRoutineToUpdate).then(r => {
+            successMessage(r);
+        }).catch(error => {
+            errorMessage(error.message || "An error occurred");
+        })
+    }
+
+    const handleDeleteDay = () => {
+        deleteDay(currentDay!).then(r => {
+            successMessage(r);
+        }).catch(error => {
+            errorMessage(error.message || "An error occurred");
+        })
+    }
 
     return (
         <>
@@ -43,9 +71,8 @@ const WorkoutRoutineCard = ({errorMessage, successMessage, currentDay}: WorkoutR
                         {currentDay?.workoutRoutineDTO?.exerciseStatsDTO.map((exercise, index) => (
                             <div className="flex items-center gap-4 my-6 justify-between w-full" key={index}>
                                 <div className="flex align-center gap-3">
-                                    <div className="flex align-center gap-3">
-                                        <ImageDecoder base64String={exercise.exerciseDTO.image} maxHeight="50"
-                                                      maxWidth="50"/>
+                                    <div className="flex align-center gap-3 max-w-[50px] max-h-[50px]">
+                                        <ImageDecoder base64String={exercise.exerciseDTO.image}/>
                                     </div>
                                 </div>
                                 <div className="flex items-center ml-5 gap-3">
@@ -54,7 +81,14 @@ const WorkoutRoutineCard = ({errorMessage, successMessage, currentDay}: WorkoutR
                                 <div className="flex gap-3 items-center ml-5">
                                     <div className="mr-1"> Sets: {exercise?.set} </div>
                                     <div className="mr-1"> Reps: {exercise?.reps} </div>
-                                    <div> Weight: {exercise?.exerciseWeight} </div>
+                                    <div className="mr-1"> Weight: {exercise?.exerciseWeight} </div>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="text-blue-600 hover:text-blue-400 bg-transparent hover:bg-transparent border-0  mr-5"
+                                    >
+                                        <Eye/>
+                                    </Button>
                                 </div>
                             </div>
                         ))}
@@ -65,6 +99,7 @@ const WorkoutRoutineCard = ({errorMessage, successMessage, currentDay}: WorkoutR
                                 variant="outline"
                                 size="sm"
                                 className="bg-blue-600 hover:bg-blue-400 text-white hover:text-white mr-5"
+                                onClick={handleFinishWorkout}
                             >
                                 Finish Workout
                             </Button>
@@ -72,7 +107,9 @@ const WorkoutRoutineCard = ({errorMessage, successMessage, currentDay}: WorkoutR
                         <Button
                             variant="outline"
                             size="sm"
-                            className="bg-red-600 hover:bg-red-400 text-white hover:text-white">
+                            className="bg-red-600 hover:bg-red-400 text-white hover:text-white"
+                            onClick={handleDeleteDay}
+                        >
                             Delete Workout Plan
                         </Button>
                     </CardFooter>
