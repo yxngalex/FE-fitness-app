@@ -21,6 +21,8 @@ interface WorkoutRoutineCardProps {
     currentDay: DayDTO | null;
     setContentLoaded: (contentLoaded: boolean) => void;
     setShowDialog: (showDialog: boolean) => void;
+    refreshTrigger: boolean;
+    setRefreshTrigger: (value: boolean) => void;
     loadData: () => void;
 }
 
@@ -30,6 +32,8 @@ const WorkoutRoutineCard = ({
                                 currentDay,
                                 setContentLoaded,
                                 setShowDialog,
+                                refreshTrigger,
+                                setRefreshTrigger,
                                 loadData
                             }: WorkoutRoutineCardProps) => {
 
@@ -58,6 +62,7 @@ const WorkoutRoutineCard = ({
     const handleDeleteDay = () => {
         deleteDay(currentDay!).then(r => {
             successMessage(r);
+            setRefreshTrigger(!refreshTrigger);
         }).catch(error => {
             errorMessage(error.message || "An error occurred");
         })
@@ -122,7 +127,7 @@ const WorkoutRoutineCard = ({
                                                 <DialogDescription>{exercise.exerciseDTO.exerciseName}</DialogDescription>
                                             </DialogHeader>
                                             <div className="flex flex-col space-y-1.5 text-lg p-1">
-                                                <div className="flex align-center gap-3">
+                                                <div className="flex items-center justify-center gap-3">
                                                     <div
                                                         className="flex align-center gap-3 max-w-[550px] max-h-[550px]">
                                                         <ImageDecoder base64String={exercise.exerciseDTO.image}/>

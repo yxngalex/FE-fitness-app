@@ -24,10 +24,11 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
     const [contentLoaded, setContentLoaded] = useState(false);
     const [currentDay, setCurrentDay] = useState<DayDTO | null>(null);
     const [daysLoaded, setDaysLoaded] = useState<DayDTO[]>([]);
+    const [refreshTrigger, setRefreshTrigger] = useState<boolean>(false);
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [refreshTrigger]);
 
     const loadData = () => {
         getAllDays()
@@ -97,6 +98,7 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
             successMessage(r);
             setShowDialog(false);
             setContentLoaded(true);
+            setRefreshTrigger(!refreshTrigger);
         }).catch(error => {
             errorMessage(error.data);
         }).finally(() => {
@@ -166,8 +168,13 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
                             daysLoaded={daysLoaded}/>
                     <div className="w-full relative flex items-center justify-center mb-9">
                     </div>
-                    <WorkoutRoutineCard errorMessage={errorMessage} successMessage={successMessage}
-                                        currentDay={currentDay} loadData={loadData} setContentLoaded={setContentLoaded}
+                    <WorkoutRoutineCard errorMessage={errorMessage}
+                                        successMessage={successMessage}
+                                        currentDay={currentDay}
+                                        loadData={loadData}
+                                        setContentLoaded={setContentLoaded}
+                                        refreshTrigger={refreshTrigger}
+                                        setRefreshTrigger={setRefreshTrigger}
                                         setShowDialog={setShowDialog}/>
                 </div>
             )}
