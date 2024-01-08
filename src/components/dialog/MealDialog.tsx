@@ -137,11 +137,19 @@ const MealDialog = ({day, errorMessage, successMessage, refreshTrigger, setRefre
                                         <div>
                                             <div className="flex items-center ml-5 gap-3">
                                                 <Label>Serving: </Label>
-                                                <Input type="number"
-                                                       className="w-[100px]"
-                                                       placeholder="Reps"
-                                                       defaultValue={item?.serving}
-                                                       {...register(`serving`)}
+                                                <Input
+                                                    type="number"
+                                                    className="w-[100px]"
+                                                    placeholder="Serving"
+                                                    value={item.serving}
+                                                    onChange={(e) => {
+                                                        const servingValue = parseInt(e.target.value, 10);
+                                                        if (!isNaN(servingValue) && servingValue > 0) {
+                                                            const updatedSelectedFood = [...selectedFood];
+                                                            updatedSelectedFood[index].serving = servingValue;
+                                                            setSelectedFood(updatedSelectedFood);
+                                                        }
+                                                    }}
                                                 />
                                                 <XCircle className="text-red-500 cursor-pointer"
                                                          onClick={() => handleRemoveFood(index)}/>
