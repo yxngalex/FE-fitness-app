@@ -1,36 +1,65 @@
-import {Dialog, DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
+import React from "react";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
 interface ConfirmationDialogProps {
-    isOpen: boolean;
+    showDialog: boolean;
     onClose: () => void;
     onConfirm: () => void;
-    label: string;
+    title: string;
+    description: string;
 }
 
-const ConfirmationDialog = ({isOpen, onClose, onConfirm, label}: ConfirmationDialogProps) => {
+const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
+                                                                   showDialog,
+                                                                   onClose,
+                                                                   onConfirm,
+                                                                   title,
+                                                                   description
+                                                               }) => {
+    const handleConfirmedDeleteDay = () => {
+        onConfirm();
+        onClose();
+    };
 
     return (
-        <Dialog open={isOpen}>
-            <DialogHeader className="p-4">
-                <p className="text-gray-800">Are you sure you want to remove {label}?</p>
-            </DialogHeader>
-            <DialogContent className="flex justify-end p-4">
-                <button
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded mr-2"
-                    onClick={onClose}
-                >
-                    No
-                </button>
-                <button
-                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-                    onClick={onConfirm}
-                >
-                    Yes
-                </button>
+        <Dialog open={showDialog} >
+            <DialogTrigger asChild>
+                <div></div>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{title}</DialogTitle>
+                    <DialogDescription>{description}</DialogDescription>
+                </DialogHeader>
+                <div className="flex justify-end space-x-4 mt-6">
+                    <Button
+                        onClick={onClose}
+                        variant="outline"
+                        size="sm"
+                        className="rounded-3xl border-slate-400 bg-slate-600 hover:bg-slate-400 text-white hover:text-white"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={handleConfirmedDeleteDay}
+                        variant="outline"
+                        size="sm"
+                        className="rounded-3xl border-slate-400 bg-red-600 hover:bg-red-400 text-white hover:text-white"
+                    >
+                        Confirm
+                    </Button>
+                </div>
             </DialogContent>
         </Dialog>
-    )
-
-}
+    );
+};
 
 export default ConfirmationDialog;

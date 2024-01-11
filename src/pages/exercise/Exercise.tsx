@@ -98,7 +98,7 @@ const Exercise = ({errorMessage, successMessage}: ExercisesProps) => {
             successMessage(r);
             setShowDialog(false);
             setContentLoaded(true);
-            setRefreshTrigger(!refreshTrigger);
+            setRefreshTrigger(prevState => !prevState);
         }).catch(error => {
             errorMessage(error.data);
         }).finally(() => {

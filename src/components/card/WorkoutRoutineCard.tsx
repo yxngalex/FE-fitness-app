@@ -14,6 +14,8 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog.tsx";
 import Routine from "@/components/routine/Routine.tsx";
+import {useState} from "react";
+import ConfirmationDialog from "@/components/dialog/ConfirmationDialog.tsx";
 
 interface WorkoutRoutineCardProps {
     errorMessage: (error: string | null) => void;
@@ -36,6 +38,28 @@ const WorkoutRoutineCard = ({
                                 setRefreshTrigger,
                                 loadData
                             }: WorkoutRoutineCardProps) => {
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+    const handleOpenDeleteConfirmation = () => {
+        setShowDeleteConfirmation(true);
+    };
+
+    const handleCloseDeleteConfirmation = () => {
+        setShowDeleteConfirmation(false);
+    };
+
+    const handleConfirmedDeleteDay = () => {
+        deleteDay(currentDay!)
+            .then((r) => {
+                successMessage(r);
+                setRefreshTrigger(!refreshTrigger);
+                setShowDeleteConfirmation(false);
+            })
+            .catch((error) => {
+                errorMessage(error.message || "An error occurred");
+                setShowDeleteConfirmation(false);
+            });
+    };
 
     const formatDate = (date: Date | null | undefined) => {
         const options: Intl.DateTimeFormatOptions = {day: 'numeric', month: 'short', year: 'numeric'};
@@ -59,14 +83,15 @@ const WorkoutRoutineCard = ({
         })
     }
 
-    const handleDeleteDay = () => {
-        deleteDay(currentDay!).then(r => {
-            successMessage(r);
-            setRefreshTrigger(!refreshTrigger);
-        }).catch(error => {
-            errorMessage(error.message || "An error occurred");
-        })
-    }
+    // const handleDeleteDay = () => {
+    //     console.log("called");
+    //     deleteDay(currentDay!).then(r => {
+    //         successMessage(r);
+    //         setRefreshTrigger(!refreshTrigger);
+    //     }).catch(error => {
+    //         errorMessage(error.message || "An error occurred");
+    //     })
+    // }
 
     return (
         <>
@@ -192,10 +217,9 @@ const WorkoutRoutineCard = ({
                                 variant="outline"
                                 size="sm"
                                 className="rounded-3xl border-slate-400 bg-transparent hover:bg-red-400 text-white hover:text-white"
-                                onClick={handleDeleteDay}
+                                onClick={handleOpenDeleteConfirmation}
                             >
-                                <XCircle className="group relative text-red-600 hover:text-white"
-                                         onClick={handleDeleteDay}/>
+                                <XCircle className="group relative text-red-600 hover:text-white"/>
                                 <span
                                     className="absolute top-1/2 ms-4 translate-y-3/4 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
                                         Delete Workout
@@ -205,6 +229,14 @@ const WorkoutRoutineCard = ({
                     </CardFooter>
                 </Card>
             </div>
+
+            <ConfirmationDialog
+                showDialog={showDeleteConfirmation}
+                onClose={handleCloseDeleteConfirmation}
+                onConfirm={handleConfirmedDeleteDay}
+                title="Delete Workout Confirmation"
+                description="Are you sure you want to delete this workout?"
+            />
         </>
     );
 }
